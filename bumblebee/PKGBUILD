@@ -1,0 +1,59 @@
+# Maintainer: Sven-Hendrik Haase <sh@lutzhaase.com>
+# Maintainer: Roland Singer <roland@manjaro.org>
+
+pkgname=bumblebee
+pkgver=3.2.1
+pkgrel=1
+pkgdesc="NVIDIA Optimus support for Linux through Primus/VirtualGL"
+arch=('i686' 'x86_64')
+depends=('primus' 'glib2' 'mesa-libgl')
+makedepends=('help2man')
+optdepends=('xf86-video-nouveau: nouveau driver'
+            'nouveau-dri: 3D acceleration features fo nouveau'
+            'bbswitch: switch on/off discrete card' 
+            'nvidia: NVIDIA kernel driver'
+            'virtualgl: alternative back-end for optirun')
+if [ "$CARCH" = "x86_64" ]; then
+     optdepends[${#optdepends[@]}]='lib32-primus: faster 32bit back-end for optirun'
+     optdepends[${#optdepends[@]}]='lib32-virtualgl: run 32bit applications with optirun'
+fi
+conflicts=('nvidia-libgl')
+provides=('nvidia-libgl')
+url="http://www.bumblebee-project.org"
+license=("GPL3")
+backup=('etc/bumblebee/bumblebee.conf' 
+        'etc/bumblebee/xorg.conf.nouveau' 
+        'etc/bumblebee/xorg.conf.nvidia')
+source=("http://www.bumblebee-project.org/${pkgname}-${pkgver}.tar.gz")
+md5sums=('30974e677bb13e8a3825fd6f3e7d3b24')
+
+build() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+
+    ./configure \
+        CONF_DRIVER_MODULE_NVIDIA=nvidia \
+        CONF_LDPATH_NVIDIA=/usr/lib/nvidia:/usr/lib32/nvidia \
+        CONF_MODPATH_NVIDIA=/usr/lib/nvidia/xorg/,/usr/lib/xorg/modules \
+        CONF_GID=users \
+        --prefix=/usr \
+        --sysconfdir=/etc \
+        --without-pidfile
+
+    make
+}
+
+package() {
+    cd "${srcdir}/${pkgname}-${pkgver}"
+
+    make install DESTDIR="$pkgdir"
+
+    # Install systemd unit
+    install -D -m644 "scripts/systemd/bumblebeed.service" "${pkgdir}/usr/lib/systemd/system/bumblebeed.service"    
+
+    # Make bash_completion work
+    mv -v "${pkgdir}/etc/bash_completion.d/bumblebee" "${pkgdir}/etc/bash_completion.d/optirun"
+
+	# Adjust ServerGroup to users
+	sed -i "/#/!s|ServerGroup[ ]*=.*|ServerGroup=users|g" "${pkgdir}/etc/bumblebee/bumblebee.conf"
+}
+
