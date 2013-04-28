@@ -1,0 +1,101 @@
+# $Id$
+# Maintainer: Ronald van Haren <ronald@archlinux.org>
+# Contributor: Gustavo Sverzut Barbieri <barbieri@gmail.com>
+
+pkgname=enlightenment17-conf-wallpaper2
+_pkgname=enlightenment
+pkgver=0.17.1
+pkgrel=1
+pkgdesc="Enlightenment conf-wallpaper2 module"
+arch=('i686' 'x86_64')
+url="http://www.enlightenment.org"
+license=('BSD')
+depends=("enlightenment17=$pkgver")
+provides=('conf-wallpaper2')
+options=('!libtool' '!emptydirs')
+source=(http://download.enlightenment.org/releases/$_pkgname-$pkgver.tar.gz)
+sha1sums=('c4d3fee83654689e9317a9198d5734ce578af7b4')
+
+build() {
+  cd "$srcdir/$_pkgname-$pkgver"
+
+  export CFLAGS="-fvisibility=hidden -ffunction-sections -fdata-sections ${CFLAGS}"
+  export CXXFLAGS="-fvisibility=hidden -ffunction-sections -fdata-sections ${CXXFLAGS}"
+  export LDFLAGS="-fvisibility=hidden -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,--as-needed  ${LDFLAGS}"
+
+  ./configure \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/lib/enlightenment  \
+    --enable-conf-wallpaper2 \
+    --disable-ibar \
+    --disable-dropshadow \
+    --disable-clock \
+    --disable-pager \
+    --disable-battery \
+    --disable-temperature \
+    --disable-notification \
+    --disable-cpufreq \
+    --disable-ibox \
+    --disable-start \
+    --disable-winlist \
+    --disable-fileman \
+    --disable-fileman-opinfo \
+    --disable-wizard \
+    --disable-conf \
+    --disable-conf-theme \
+    --disable-conf-intl \
+    --disable-msgbus \
+    --disable-conf-applications \
+    --disable-conf-display \
+    --disable-conf-shelves \
+    --disable-conf-keybindings \
+    --disable-conf-edgebindings \
+    --disable-conf-window-remembers \
+    --disable-conf-window-manipulation \
+    --disable-conf-menus \
+    --disable-conf-dialogs \
+    --disable-conf-performance \
+    --disable-conf-paths \
+    --disable-conf-interaction \
+    --disable-gadman \
+    --disable-mixer \
+    --disable-connman \
+    --disable-illume2 \
+    --disable-syscon \
+    --disable-everything \
+    --disable-systray \
+    --disable-comp \
+    --enable-physics \
+    --disable-quickaccess \
+    --disable-shot \
+    --disable-backlight \
+    --disable-tasks \
+    --disable-conf-randr \
+    --disable-xkbswitch \
+    --disable-tiling \
+    --disable-access \
+    --disable-doc
+
+  cd src/modules
+  make
+}
+
+package() {
+  cd $srcdir/$_pkgname-$pkgver/src/modules
+
+  make DESTDIR=$pkgdir install
+
+# install license files
+  if [ -e $srcdir/$_pkgname-$_pkgver/COPYING ]; then
+    install -Dm644 $srcdir/$_pkgname-$_pkgver/COPYING \
+        $pkgdir/usr/share/licenses/$pkgname/COPYING
+  fi
+
+  if [ -e $srcdir/$_pkgname-$_pkgver/COPYING-PLAIN ]; then
+    install -Dm644 $srcdir/$_pkgname-$_pkgver/COPYING-PLAIN \
+        $pkgdir/usr/share/licenses/$pkgname/COPYING-PLAIN
+  fi
+}
+
+

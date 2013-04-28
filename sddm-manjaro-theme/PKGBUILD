@@ -1,0 +1,17 @@
+pkgname=sddm-manjaro-theme
+pkgver=0.8.4.$(date +%m%d)
+pkgrel=1
+pkgdesc="Manjaro theme for SDDM"
+arch=('any')
+url="http://manjaro.org"
+license=('unknown')
+depends=('sddm')
+source=("manjaro.tar.gz::http://git.manjaro.org/manjaro-linux-graphics/mdm-themes/archive-tarball/0.1.1")
+sha256sums=('7ae89dcc9f67ff7fd01e11d789020f05c70e873c41e8ec151df24ec5308c6025')
+
+build() {
+  cd ${srcdir}/
+
+  install -d ${pkgdir}/usr/share/apps/sddm/themes
+  cp -R * ${pkgdir}/usr/share/apps/sddm/themes
+}

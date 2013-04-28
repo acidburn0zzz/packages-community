@@ -1,0 +1,32 @@
+pkgname=sddm
+pkgver=0.1.0
+pkgrel=3
+pkgdesc="QML based X11 display manager"
+arch=('i686' 'x86_64')
+backup=('etc/sddm.conf')
+url="http://github.com/sddm/sddm"
+license=('GPL')
+depends=('upower' 'qt4' 'libxcb')
+makedepends=('cmake')
+
+source=(https://github.com/sddm/sddm/archive/$pkgver.tar.gz 'default.png' 'root.png')
+sha256sums=(586b87331663d2c389e27fc6cda7cfb83adcd7015aebd1dc683e4adcbe1bfc45
+            5e0d00e5431eccc2b7d4865324662cb2498ff3f748fbe421fdf0ec557c1cfb85
+            802b04637361148637223aac4cd50dbf0cdc17373d22d0e7b94e8841a9279d89)
+
+build() {
+  cd $pkgname-$pkgver && 
+  mkdir -p build && 
+  cd build &&
+  cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DQT_QMAKE_EXECUTABLE=qmake-qt4 &&
+  make
+}
+
+package() {
+  cd $pkgname-$pkgver/build &&
+  make DESTDIR="$pkgdir" install
+  echo "These files are created by Miguel Casas." > "$pkgdir"/usr/share/apps/sddm/faces/README
+  cp "$srcdir"/root.png "$pkgdir"/usr/share/apps/sddm/faces/root.face.icon
+  cp "$srcdir"/default.png "$pkgdir"/usr/share/apps/sddm/faces/default.face.icon
+}
+

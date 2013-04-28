@@ -1,0 +1,29 @@
+# Maintainer: Philip Müller <philm[at]manjaro[dot]org>
+
+pkgname=systemctl-gui
+pkgver=0.1.1
+pkgrel=1
+pkgdesc="A gtk3 frontend for systemctl"
+arch=(any)
+url="http://git.manjaro.org/community/systemctl-gui"
+license=('GPL')
+depends=('python' 'systemd' 'xdg-su')
+makedepends=()
+options=(!emptydirs)
+install=
+source=("systemctl-gui-$pkgver.tar.gz::http://git.manjaro.org/community/systemctl-gui/archive-tarball/$pkgver"
+		"systemctl-gui.desktop")
+sha256sums=('41e0a5e478cbfc924ce8e4a37a11a004b42d0d02dfbd620238921021d71c363e'
+			      '093128ae1c9d1d42daad9df2293a0264ee4da1c2022ec7989dc54ad4750afea1')
+
+package() {
+	cd "$srcdir/community-$pkgname"
+	mkdir -p "${pkgdir}/usr/{bin,share/{applications,licenses}/systemctl-gui}"
+	install -Dm755 "systemctl-gui" "${pkgdir}/usr/bin/systemctl-gui"
+	install -Dm644 "copyright" "${pkgdir}/usr/share/licenses/systemctl-gui/LICENSE"
+
+	# Install desktop file
+	install -Dm644 $srcdir/${pkgname}.desktop $pkgdir/usr/share/applications/${pkgname}.desktop
+}
+
+# vim:set ts=2 sw=2 et:

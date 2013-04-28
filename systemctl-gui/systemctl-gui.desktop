@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=Configure 'systemctl'
+Name[de]=Konfiguriere 'systemctl'
+Name[fr]=Configurer 'systemctl'
+Name[en_GB]=Configure 'systemctl'
+Comment=Configure systemd
+Comment[fr]=Configurer systemd
+Comment[en_GB]=Configure systemd
+Icon=preferences-system
+Exec=/usr/bin/xdg-su root systemctl-gui
+Terminal=false
+Type=Application
+Categories=GTK;System;
+StartupNotify=true
