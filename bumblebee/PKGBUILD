@@ -3,7 +3,7 @@
 
 pkgname=bumblebee
 pkgver=3.2.1
-pkgrel=1
+pkgrel=3
 pkgdesc="NVIDIA Optimus support for Linux through Primus/VirtualGL"
 arch=('i686' 'x86_64')
 depends=('primus' 'glib2' 'mesa-libgl')
@@ -17,8 +17,7 @@ if [ "$CARCH" = "x86_64" ]; then
      optdepends[${#optdepends[@]}]='lib32-primus: faster 32bit back-end for optirun'
      optdepends[${#optdepends[@]}]='lib32-virtualgl: run 32bit applications with optirun'
 fi
-conflicts=('nvidia-libgl')
-provides=('nvidia-libgl')
+
 url="http://www.bumblebee-project.org"
 license=("GPL3")
 backup=('etc/bumblebee/bumblebee.conf' 
