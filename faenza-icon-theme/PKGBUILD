@@ -5,7 +5,7 @@
 
 pkgname=faenza-icon-theme
 pkgver=1.3.1
-pkgrel=3
+pkgrel=4
 pkgdesc="Icon theme designed for Equinox GTK theme"
 url="http://gnome-look.org/content/show.php/Faenza?content=128143"
 license=('GPL3')
@@ -33,8 +33,10 @@ sha256sums=('afd1c32229989e4cf09733c1ce5f2a651e585d86f45e98e9de6e8813f15d0edc'
 
 package() {
 	cd "${srcdir}/${pkgname}-1.3"
-	mkdir -p "${pkgdir}"/usr/share/icons
-	cp -rf Faenza{,-Dark,-Darkest,-Darker} "${pkgdir}"/usr/share/icons/
+	mkdir -p "$pkgdir/usr/share/icons" "$pkgdir/usr/lib" "$pkgdir/usr/share"
+	cp -rf Faenza{,-Dark,-Darkest,-Darker,-Ambiance,-Radiance} "$pkgdir/usr/share/icons/"
+	cp -rf rhythmbox "$pkgdir/usr/lib/"
+	cp -rf emesene "$pkgdir/usr/share/"
 
 	# set the Default Dristributor and start menu logo
 	for theme in Faenza{,-Dark}; do
