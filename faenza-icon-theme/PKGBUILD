@@ -1,0 +1,56 @@
+# Maintainer: Frikilinux <frikilinux at frikilinux.com.ar>
+# Contributor: graysky <graysky AT archlinux DOT us>
+# Contributor: Samsagax <samsagax AT gmail DOT com>
+# Contributor: simongmzlj <simongmzlj AT gmail DOT com>
+
+pkgname=faenza-icon-theme
+pkgver=1.3.1
+pkgrel=3
+pkgdesc="Icon theme designed for Equinox GTK theme"
+url="http://gnome-look.org/content/show.php/Faenza?content=128143"
+license=('GPL3')
+arch=('any')
+makedepends=()
+options=(!strip)
+source=("http://ppa.launchpad.net/tiheum/equinox/ubuntu/pool/main/f/${pkgname}/${pkgname}_${pkgver}.tar.gz"
+		'manjaro-logo-22.png'
+		'manjaro-logo-24.png'
+		'manjaro-logo-32.png'
+		'manjaro-logo-48.png'
+		'manjaro-logo-64.png'
+		'manjaro-logo-96.png'
+		'manjaro-logo.svg'
+		'manjaro-logo-symbolic.svg')
+sha256sums=('afd1c32229989e4cf09733c1ce5f2a651e585d86f45e98e9de6e8813f15d0edc'
+            '6e7c5ffae0f4f6997dc18b200acfb784de3712db83beb88a47c4d1395d9f8acd'
+            'cd8402e58ea13dd93d319229c45ab45b79234b7287d6d4bee0d49bdd07779eff'
+            '02fe169e4f5db4381bce9fcea401326fbb197bfb4797353904cf46a094dc7312'
+            'dd2650edcaa3c2285c4819a83f6502252dbb5e21ca0465a8c11ce3e7052d0416'
+            '8ffb72d2d2d5d95cfd39671f90cc1d8f2a38d3a4cf494f5732852db3d3803b5c'
+            '28bc41f96acad859088ea02cc11de1cfdd2e9727652a2143294247c292ff38a4'
+            '000cccaa21dd3298204f3badb69f48f8ce903730a657704a1587d8aa2781f320'
+            '8d4ccbe31174aa18bf81477b15f2885bde851b6f788e0e6caf51901a2c1551ea')
+
+package() {
+	cd "${srcdir}/${pkgname}-1.3"
+	mkdir -p "${pkgdir}"/usr/share/icons
+	cp -rf Faenza{,-Dark,-Darkest,-Darker} "${pkgdir}"/usr/share/icons/
+
+	# set the Default Dristributor and start menu logo
+	for theme in Faenza{,-Dark}; do
+		for size in 22 24 32 48 64 96; do
+			cd "${pkgdir}"/usr/share/icons/${theme}/places/${size}/
+			cp "${srcdir}"/manjaro-logo-${size}.png ./distributor-logo-manjaro.png
+			cp "${srcdir}"/manjaro-logo-${size}.png ./start-here-manjaro.png
+			ln -sf distributor-logo{-manjaro,}.png
+			ln -sf start-here{-manjaro,}.png
+		done;
+		cd "${pkgdir}"/usr/share/icons/${theme}/places/scalable/
+		cp "${srcdir}"/manjaro-logo.svg ./distributor-logo-manjaro.svg
+		cp "${srcdir}"/manjaro-logo.svg ./start-here-manjaro.svg
+		cp "${srcdir}"/manjaro-logo-symbolic.svg ./start-here-manjaro-symbolic.svg
+		ln -sf distributor-logo{-manjaro,}.svg
+		ln -sf start-here{-manjaro,}.svg
+		ln -sf start-here{-manjaro-symbolic,-symbolic}.svg
+	done;
+}
