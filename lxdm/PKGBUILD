@@ -51,7 +51,7 @@ prepare() {
 
 build() {
     cd $srcdir/$pkgname-$pkgver
-    ./configure --sysconfdir=/etc --prefix=/usr --libexecdir=/usr/lib/lxdm
+    ./configure --sysconfdir=/etc --prefix=/usr --libexecdir=/usr/lib/lxdm \
     --bindir=/usr/bin \
     --sbindir=/usr/bin
     make
