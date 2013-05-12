@@ -65,7 +65,7 @@ build() {
 
 package() {
     cd $srcdir/$pkgname-$pkgver
-    make DESTDIR=$pkgdir install
+    make DESTDIR=$pkgdir sbindir=/usr/bin install
 
     install -m644 $srcdir/lxdm.pam $pkgdir/etc/pam.d/lxdm
     install -Dm644 $srcdir/lxdm.service $pkgdir/usr/lib/systemd/system/lxdm.service
