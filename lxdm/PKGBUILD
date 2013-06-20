@@ -6,7 +6,7 @@
 
 pkgname=lxdm
 pkgver=0.4.1
-pkgrel=26
+pkgrel=27
 pkgdesc='Lightweight X11 Display Manager'
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/lxdm/"
@@ -28,6 +28,7 @@ source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz
 		lxdm-0.4.1-modern-systems.patch
 		lxdm-0.4.1-nolang-show-sessions.patch
 		lxdm-0.4.1-pam-env-vars.patch
+		lxdm-0.4.1-ecryptfs.patch
 		org.manjaro.pkexec.lxdm-config.policy
                 lxdm-config.desktop
                 #####################################
@@ -42,6 +43,7 @@ prepare() {
     patch -Np1 -i $srcdir/lxdm-0.4.1-event-check-bug.patch
     patch -Np1 -i $srcdir/lxdm-0.4.1-nolang-show-sessions.patch
     patch -Np1 -i $srcdir/lxdm-0.4.1-pam-env-vars.patch
+    patch -Np1 -i $srcdir/lxdm-0.4.1-ecryptfs.patch
 
     #####################################
     ## Custom Manjaro Login Pane Patch ##
@@ -110,6 +112,7 @@ sha256sums=('9e0d0a5672fcf31a18de8178ce73eab1723d6ae7097dfe41e9fe2c46e180cf08'
             'c4dbea49b6b4cab407d621e868e1bda0111df1012a244abde36cac54ea4a5735'
             '029c77c53c42188ce9fc3372c77aac942517e449d77be13717bb79108f9d4971'
             'dd18af5704a9b52d0730508a7dae8604ae4e62c12a04dc386138fa082a5faff9'
+            'f7db74b542a6d614bc8cf2da4395e526e9c460a335dc558d15f6c0aeb1d321ac'
             '21288b1de0354dfa3ee45c9c91552c3abb1e58aba48c70eb7b604b6e07e33ea1'
             'ced6936b00b8e7cfd67b7be960e5e0f447581a03c1b19e34783257ed4b602db7'
             '8f2112373bd0cca9509c0cfade7543dc875f5340bf9e796bc06a6d7e41149cf5')

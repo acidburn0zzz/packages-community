@@ -5,12 +5,13 @@
 
 pkgname=forecasts
 pkgver=83648
-pkgrel=1
+ever=0.17.3
+pkgrel=2
 pkgdesc="Enlightenment e17 module: A simple and useful weather forecasts"
 arch=('i686' 'x86_64')
 url="http://svn.enlightenment.org/svn/e/trunk/E-MODULES-EXTRA/forecasts/"
 license=('MIT')
-depends=('enlightenment17')
+depends=("enlightenment17=$ever")
 makedepends=('subversion')
 provides=('forecasts-svn')
 options=('!libtool')

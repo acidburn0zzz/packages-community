@@ -5,12 +5,13 @@
 
 pkgname=engage
 pkgver=84371
-pkgrel=1
+ever=0.17.3
+pkgrel=2
 pkgdesc="Enlightenment e17 module: A taskbar and app-launcher dock, which makes use of composite."
 arch=('i686' 'x86_64')
 url="http://svn.enlightenment.org/svn/e/trunk/E-MODULES-EXTRA/engage/"
 license=('MIT')
-depends=('enlightenment17')
+depends=("enlightenment17=$ever")
 makedepends=('subversion')
 provides=('engage-svn')
 options=('!libtool')
