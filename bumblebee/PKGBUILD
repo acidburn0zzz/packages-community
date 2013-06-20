@@ -3,7 +3,7 @@
 
 pkgname=bumblebee
 pkgver=3.2.1
-pkgrel=3
+pkgrel=4
 pkgdesc="NVIDIA Optimus support for Linux through Primus/VirtualGL"
 arch=('i686' 'x86_64')
 depends=('primus' 'glib2' 'mesa-libgl')
@@ -35,6 +35,8 @@ build() {
         CONF_MODPATH_NVIDIA=/usr/lib/nvidia/xorg/,/usr/lib/xorg/modules \
         CONF_GID=users \
         --prefix=/usr \
+        --sbindir=/usr/bin \
+        --with-udev-rules=/usr/lib/udev/rules.d/ \
         --sysconfdir=/etc \
         --without-pidfile
 
@@ -48,6 +50,7 @@ package() {
 
     # Install systemd unit
     install -D -m644 "scripts/systemd/bumblebeed.service" "${pkgdir}/usr/lib/systemd/system/bumblebeed.service"    
+    sed -i "s/sbin/bin/" "${pkgdir}/usr/lib/systemd/system/bumblebeed.service"
 
     # Make bash_completion work
     mv -v "${pkgdir}/etc/bash_completion.d/bumblebee" "${pkgdir}/etc/bash_completion.d/optirun"
