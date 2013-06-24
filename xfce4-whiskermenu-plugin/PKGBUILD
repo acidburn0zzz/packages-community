@@ -1,0 +1,34 @@
+# Maintainer: Philip Mueller <philm|at|manjaro|dot|org>
+# Contributor: Graeme Gott <graeme@gottcode.org>
+# Contributor: Diego Principe <cdprincipe@at@gmail@dot@com>
+
+pkgname=xfce4-whiskermenu-plugin
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Alternate Xfce menu"
+arch=('i686' 'x86_64')
+url="http://gottcode.org/${pkgname}/"
+license=('GPL2')
+depends=('xfce4-panel')
+makedepends=('cmake' 'git')
+provides=('xfce4-whiskermenu-plugin')
+conflicts=('xfce4-whiskermenu-plugin')
+install=${pkgname}.install
+source=(git://github.com/gottcode/xfce4-whiskermenu-plugin.git)
+md5sums=('SKIP')
+
+pkgver() {
+  cd ${srcdir}/${pkgname}
+  git describe --always | sed 's|-|.|g' | sed 's|v||g'
+}
+
+build() {
+  cd ${srcdir}/${pkgname}
+  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+  make
+}
+
+package() {
+  cd ${srcdir}/${pkgname}
+  make install/strip DESTDIR=${pkgdir}
+}
