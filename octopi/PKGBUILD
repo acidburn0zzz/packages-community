@@ -1,0 +1,46 @@
+# maintainer: Philip Müller <philm[at]manjaro[dog]org>
+# maintainer: Roland Singer <roland[at]manjaro[dog]org>
+
+pkgname=octopi
+pkgver=0.1.8.07c3339
+pkgrel=1
+pkgdesc="A pacman frontend using Qt libs"
+arch=('i686' 'x86_64')
+url="http://octopiproject.wordpress.com"
+license=('GPL')
+depends=('qt4' 'pacman')
+makedepends=('git')
+optdepends=('kdesu: for KDE'
+            'gksu: for XFCE, Gnome, LXDE, Cinnamon'
+            'gnome-keyring: for password management')
+
+#install=install
+_git=yes
+source=(git://github.com/aarnt/octopi.git
+        'octopi.desktop')
+sha256sums=('SKIP' '76cdb16cd5f40c85fc748a22cf2877c2e50d04692160576988f6a9fd3fd42fe9')
+
+pkgver() {
+  cd ${srcdir}/${pkgname}
+  #echo "`git tag | tail -1 | sed 's|v||g'`.`git describe --always`"
+  # until we reach 0.2
+  echo "0.1.$(date +%m%d).`git describe --always`"
+}
+
+build() {
+  cd "${srcdir}/${pkgname}"
+
+  qmake-qt4
+
+  make all
+}
+
+package() {
+  cd "${srcdir}/${pkgname}"
+  mkdir -p ${pkgdir}/usr/bin
+  cp bin/octopi ${pkgdir}/usr/bin
+  mkdir -p ${pkgdir}/usr/share/icons
+  install -m644 resources/images/octopi_yellow.png ${pkgdir}/usr/share/icons/octopi.png
+  mkdir -p ${pkgdir}/usr/share/applications
+  install -m644 ${srcdir}/octopi.desktop ${pkgdir}/usr/share/applications
+}
