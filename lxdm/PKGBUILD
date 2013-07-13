@@ -6,7 +6,7 @@
 
 pkgname=lxdm
 pkgver=0.4.1
-pkgrel=27
+pkgrel=28
 pkgdesc='Lightweight X11 Display Manager'
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/lxdm/"
@@ -103,7 +103,7 @@ package() {
 }
 
 sha256sums=('9e0d0a5672fcf31a18de8178ce73eab1723d6ae7097dfe41e9fe2c46e180cf08'
-            '9a63e118215f0492e5b7c049173a1994c1d86f00726f615c0757ea0a663deaf1'
+            '3842c976b31a0f69caaf10272424dd396156ec7b36f918453da2e86d939d6082'
             '28b8a9b1c18943529187973a4fdd9b8afe1050d45219886a46e4074e4bd4ea88'
             'b901a2141f3becea005952f59d54c13357c0ba12e9ebbde24cf395a50ce748e2'
             'f2f60852f0b556c49ec95c1b1cbf575e88ebe049718137aca068cd6fbec01189'

@@ -2,7 +2,7 @@
 # maintainer: Roland Singer <roland[at]manjaro[dog]org>
 
 pkgname=octopi
-pkgver=0.1.8.07c3339
+pkgver=0.1.9
 pkgrel=1
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
