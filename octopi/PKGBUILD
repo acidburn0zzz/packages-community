@@ -2,7 +2,7 @@
 # maintainer: Roland Singer <roland[at]manjaro[dog]org>
 
 pkgname=octopi
-pkgver=0.1.9
+pkgver=0.1.0720.ee5d764
 pkgrel=1
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
@@ -17,9 +17,8 @@ optdepends=('kdesu: for KDE'
 
 #install=install
 _git=yes
-source=(git://github.com/aarnt/octopi.git
-        'octopi.desktop')
-sha256sums=('SKIP' '76cdb16cd5f40c85fc748a22cf2877c2e50d04692160576988f6a9fd3fd42fe9')
+source=(git://github.com/aarnt/octopi.git)
+sha256sums=('SKIP')
 
 pkgver() {
   cd ${srcdir}/${pkgname}
@@ -29,19 +28,33 @@ pkgver() {
 }
 
 build() {
-  cd "${srcdir}/${pkgname}"
+    cpucount=$(grep -c processor /proc/cpuinfo 2>/dev/null)
+    jc=$((${cpucount:-1}))
 
-  qmake-qt4
+    cd "${srcdir}/${pkgname}"
+    msg "Starting build..."
 
-  make all
+    qmake-qt4 $pkgname.pro 	
+    make -j $jc
+
+    cd notifier/pacmanhelper
+    msg "Building pacmanhelper..."
+    qmake-qt4 pacmanhelper.pro
+    make -j $jc    
 }
 
-package() {
-  cd "${srcdir}/${pkgname}"
-  mkdir -p ${pkgdir}/usr/bin
-  cp bin/octopi ${pkgdir}/usr/bin
-  mkdir -p ${pkgdir}/usr/share/icons
-  install -m644 resources/images/octopi_yellow.png ${pkgdir}/usr/share/icons/octopi.png
-  mkdir -p ${pkgdir}/usr/share/applications
-  install -m644 ${srcdir}/octopi.desktop ${pkgdir}/usr/share/applications
+package() {   
+   cd "${srcdir}/${pkgname}"
+   #Octopi main files
+   install -D -m755 bin/$pkgname ${pkgdir}/usr/bin/$pkgname
+   install -D -m644 $pkgname.desktop ${pkgdir}/usr/share/applications/$pkgname.desktop
+   install -D -m644 resources/images/${pkgname}_yellow.png ${pkgdir}/usr/share/icons/$pkgname.png
+
+   #Pacmanhelper service files
+   install -D -m755 notifier/bin/pacmanhelper ${pkgdir}/usr/lib/octopi/pacmanhelper
+
+   install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacman.policy ${pkgdir}/usr/share/polkit-1/actions/org.octopi.pacman.policy
+   install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.conf ${pkgdir}/etc/dbus-1/system.d/org.octopi.pacmanhelper.conf
+   install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.xml ${pkgdir}/usr/share/dbus-1/interfaces/org.octopi.pacmanhelper.xml
+   install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.service ${pkgdir}/usr/share/dbus-1/system-services/org.octopi.pacmanhelper.service
 }
