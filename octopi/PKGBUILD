@@ -2,7 +2,7 @@
 # maintainer: Roland Singer <roland[at]manjaro[dog]org>
 
 pkgname=octopi
-pkgver=0.1.0720.ee5d764
+pkgver=0.2.0.0721.0db39e0
 pkgrel=1
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
@@ -24,7 +24,7 @@ pkgver() {
   cd ${srcdir}/${pkgname}
   #echo "`git tag | tail -1 | sed 's|v||g'`.`git describe --always`"
   # until we reach 0.2
-  echo "0.1.$(date +%m%d).`git describe --always`"
+  echo "0.2.0.$(date +%m%d).`git describe --always`"
 }
 
 build() {
@@ -41,6 +41,11 @@ build() {
     msg "Building pacmanhelper..."
     qmake-qt4 pacmanhelper.pro
     make -j $jc    
+
+    cd ../octopi-notifier
+    msg "Building octopi-notifier..."
+    qmake-qt4 octopi-notifier.pro
+    make -j $jc
 }
 
 package() {   
@@ -57,4 +62,8 @@ package() {
    install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.conf ${pkgdir}/etc/dbus-1/system.d/org.octopi.pacmanhelper.conf
    install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.xml ${pkgdir}/usr/share/dbus-1/interfaces/org.octopi.pacmanhelper.xml
    install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.service ${pkgdir}/usr/share/dbus-1/system-services/org.octopi.pacmanhelper.service
+
+   #Octopi-notifier file
+   install -D -m755 notifier/bin/octopi-notifier ${pkgdir}/usr/bin/octopi-notifier
+   install -D -m644 octopi-notifier.desktop ${pkgdir}/etc/xdg/autostart/octopi-notifier.desktop
 }
