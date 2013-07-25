@@ -2,7 +2,7 @@
 # maintainer: Roland Singer <roland[at]manjaro[dog]org>
 
 pkgname=octopi
-pkgver=0.2.0.0721.0db39e0
+pkgver=0.2.0.0721.8f01468
 pkgrel=1
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
@@ -13,7 +13,8 @@ makedepends=('git')
 optdepends=('kdesu: for KDE'
             'gksu: for XFCE, Gnome, LXDE, Cinnamon'
             'gnome-keyring: for password management'
-            'yaourt: for AUR support')
+            'yaourt: for AUR support'
+            'xfce4-notifyd: for notifications')
 
 #install=install
 _git=yes
