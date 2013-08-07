@@ -55,7 +55,7 @@ package() {
     # Make bash_completion work
     mv -v "${pkgdir}/etc/bash_completion.d/bumblebee" "${pkgdir}/etc/bash_completion.d/optirun"
 
-	# Adjust ServerGroup to users
-	sed -i "/#/!s|ServerGroup[ ]*=.*|ServerGroup=users|g" "${pkgdir}/etc/bumblebee/bumblebee.conf"
+    # Adjust ServerGroup to users
+    sed -i "/#/!s|ServerGroup[ ]*=.*|ServerGroup=users|g" "${pkgdir}/etc/bumblebee/bumblebee.conf"
 }
 

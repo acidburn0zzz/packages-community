@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Tox
+Comment=FOSS instant messaging application
+Exec=tox
+Icon=tox
+Terminal=false
+Type=Application
+Categories=Network;
+StartupNotify=true
+X-GNOME-UsesNotifications=true
+X-Desktop-File-Install-Version=0.21
+MimeType=x-scheme-handler/irc;x-scheme-handler/ircs;
