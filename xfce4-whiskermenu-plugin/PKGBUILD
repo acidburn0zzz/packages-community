@@ -4,31 +4,25 @@
 
 pkgname=xfce4-whiskermenu-plugin
 pkgver=1.1.1
-pkgrel=1
+pkgrel=2
 pkgdesc="Alternate Xfce menu"
 arch=('i686' 'x86_64')
 url="http://gottcode.org/${pkgname}/"
 license=('GPL2')
 depends=('xfce4-panel')
-makedepends=('cmake' 'git')
+makedepends=('cmake')
 install=${pkgname}.install
-source=(git://github.com/gottcode/xfce4-whiskermenu-plugin.git)
-md5sums=('SKIP')
-
-pkgver() {
-  cd ${srcdir}/${pkgname}
-  echo "`git tag | tail -1 | sed 's|v||g'`.`git describe --always | cut -d- -f2`.`git describe --always | cut -d- -f3`"
-#  # Workaround since no 1.0.3 tag yet
-#  #echo "1.0.3.`git describe --always | cut -d- -f2`.`git describe --always | cut -d- -f3`"
-}
+source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
+md5sums=('6bc33bc3520a6e791c7cc6c62bb822cb')
+sha256sums=('cfb86e9604c58a4657149950bfb693600a364ce4d64e4100c72bda489385dead')
 
 build() {
-  cd ${srcdir}/${pkgname}
+  cd ${srcdir}/${pkgname}-${pkgver}
   cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
   make
 }
 
 package() {
-  cd ${srcdir}/${pkgname}
+  cd ${srcdir}/${pkgname}-${pkgver}
   make install DESTDIR=${pkgdir}
 }
