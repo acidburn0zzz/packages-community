@@ -11,6 +11,7 @@ url="http://gottcode.org/${pkgname}/"
 license=('GPL2')
 depends=('xfce4-panel')
 makedepends=('cmake')
+options=('!makeflags')
 install=${pkgname}.install
 source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
 md5sums=('6bc33bc3520a6e791c7cc6c62bb822cb')
