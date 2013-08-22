@@ -1,0 +1,17 @@
+# Maintainer: dcell <josh@manjaroartwork.com>
+# Contributor: dcell <josh@manjaroartwork.com>
+
+pkgname=fetter
+pkgver=1.0
+pkgrel=1
+pkgdesc="lightweight bash info grabber to display system information and manjaro text on terminal startup"
+url="http://manjaroartwork.com"
+license=('GPL')
+arch=('any')
+source=("http://manjaroartwork.com/fetter/$pkgver-$pkgrel/fetter.zip")
+sha512sums=('7882a81337cfa21898d9d4cdf5821ec93bb384ec9ca6ab9f775e5e8d6792e5fc16887b0ba3b7be1a1e10f096a954e892ffbaa59160ef50fc625583b2e354e6f4')
+package() {
+    mkdir -p $pkgdir/usr/bin
+    mv $srcdir/fetter $pkgdir/usr/bin/fetter
+    chmod +x $pkgdir/usr/bin/fetter
+}
