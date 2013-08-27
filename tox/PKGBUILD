@@ -2,13 +2,13 @@
 
 pkgname=tox
 _gitname='ProjectTox-Qt-GUI'
-pkgver=0.1.0.0731.172ed2a
+pkgver=0.1.0.0827.36d6502
 pkgrel=1
 pkgdesc="FOSS instant messaging application aimed to replace Skype (GUI)"
 arch=('i686' 'x86_64')
 url="http://tox.im"
 license=('GPLv3')
-depends=('qt5-base' 'libsodium')
+depends=('ncurses' 'libsodium' 'qt5-base')
 makedepends=('git' 'make')
 conflicts=('tox-qt-gui')
 replaces=('tox-qt-gui')
@@ -23,27 +23,25 @@ _gitname2='ProjectTox-Core'
 pkgver() {
   cd $_gitname
   echo "0.1.0.$(date +%m%d).`git describe --always | sed 's/-/./g'`"
+  # when we reach 0.1.1
+  #echo 0.1.1.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-	# get tox-core
-  	cd $srcdir/$_gitname/submodules
-	rm -R "$_gitname2"
-	git clone --recursive "$_gitroot"
+	cd "$_gitname"
 
-	# version
-	sed -i "s|developers' test version, not for public use|Tox - $pkgver|g" $srcdir/$_gitname/src/mainwindow.cpp
+    git submodule update --init --recursive
 
-  	cd $srcdir/$_gitname
-
-	# create build folder
 	if [[ -d build ]]; then
 		rm -rf build
 	fi
 
+	# version
+	sed -i "s|developers' test version, not for public use|Tox - $pkgver|g" src/mainwindow.cpp
+
 	mkdir build && cd build
 	msg "Building ..." 
-	qmake -Wall ../projectfiles/QtCreator/TOX-Qt-GUI.pro
+	qmake-qt5 -Wall ../projectfiles/QtCreator/TOX-Qt-GUI.pro
 	make
 	msg "Done"
 }
