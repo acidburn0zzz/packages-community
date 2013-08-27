@@ -27,7 +27,8 @@ pkgver() {
   if [ "$_git" == "yes" ]; then
      #echo "`git tag | tail -1 | sed 's|v||g'`.`git describe --always`"
      #echo "0.2.0.$(date +%m%d).`git describe --always`"
-     echo "0.2.0$(git describe --tags | sed 's|v||g' | sed 's|-|.|g')"
+     #echo "0.2.0$(git describe --tags | sed 's|v||g' | sed 's|-|.|g')"
+     echo 0.2.0.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
   else
      echo "$pkgver"
   fi
