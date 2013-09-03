@@ -4,26 +4,51 @@
 
 pkgname=xfce4-whiskermenu-plugin
 pkgver=1.1.1
-pkgrel=2
+pkgrel=1
 pkgdesc="Alternate Xfce menu"
 arch=('i686' 'x86_64')
 url="http://gottcode.org/${pkgname}/"
 license=('GPL2')
 depends=('xfce4-panel')
-makedepends=('cmake')
 options=('!makeflags')
 install=${pkgname}.install
-source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
-md5sums=('6bc33bc3520a6e791c7cc6c62bb822cb')
-sha256sums=('cfb86e9604c58a4657149950bfb693600a364ce4d64e4100c72bda489385dead')
+_git=yes
+
+if [ "$_git" == "yes" ]; then
+   makedepends=('cmake' 'git')
+   source=(git://github.com/gottcode/xfce4-whiskermenu-plugin.git)
+   sha256sums=('SKIP')
+else
+   makedepends=('cmake')
+   source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
+   md5sums=('6bc33bc3520a6e791c7cc6c62bb822cb')
+   sha256sums=('cfb86e9604c58a4657149950bfb693600a364ce4d64e4100c72bda489385dead')
+fi
+
+pkgver() {
+  cd ${srcdir}/${pkgname}
+  if [ "$_git" == "yes" ]; then
+     echo 1.1.1.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  else
+     echo "$pkgver"
+  fi
+}
 
 build() {
-  cd ${srcdir}/${pkgname}-${pkgver}
+  if [ "$_git" == "yes" ]; then
+     cd ${srcdir}/${pkgname}
+  else
+     cd ${srcdir}/${pkgname}-${pkgver}
+  fi
   cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
   make
 }
 
 package() {
-  cd ${srcdir}/${pkgname}-${pkgver}
+  if [ "$_git" == "yes" ]; then
+     cd ${srcdir}/${pkgname}
+  else
+     cd ${srcdir}/${pkgname}-${pkgver}
+  fi
   make install DESTDIR=${pkgdir}
 }

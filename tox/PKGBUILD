@@ -2,7 +2,7 @@
 
 pkgname=tox
 _gitname='ProjectTox-Qt-GUI'
-pkgver=0.1.0.0827.36d6502
+pkgver=0.1.0.0830.14a73cc
 pkgrel=1
 pkgdesc="FOSS instant messaging application aimed to replace Skype (GUI)"
 arch=('i686' 'x86_64')
