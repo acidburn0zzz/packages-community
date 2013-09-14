@@ -4,7 +4,7 @@
 
 pkgname=enlightenment17-conf-wallpaper2
 _pkgname=enlightenment
-pkgver=0.17.3
+pkgver=0.17.4
 pkgrel=1
 pkgdesc="Enlightenment conf-wallpaper2 module"
 arch=('i686' 'x86_64')
@@ -14,7 +14,7 @@ depends=("enlightenment17=$pkgver")
 provides=('conf-wallpaper2')
 options=('!libtool' '!emptydirs')
 source=(http://download.enlightenment.org/releases/$_pkgname-$pkgver.tar.gz)
-sha1sums=('998a5ada3861028ffd65f994270e5f7f8e9baf9b')
+sha256sums=('090447607c850f98ce8c2089c55e15d77b35a9014eddff9119f38b0e0e49f0b7')
 
 build() {
   cd "$srcdir/$_pkgname-$pkgver"

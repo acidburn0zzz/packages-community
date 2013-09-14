@@ -6,44 +6,42 @@
 
 pkgname=lxdm
 pkgver=0.4.1
-pkgrel=28
+pkgrel=29
 pkgdesc='Lightweight X11 Display Manager'
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/lxdm/"
 license=('GPL')
 groups=('lxde')
-depends=('gtk2' 'xorg-server' 'adwaita-manjaro-themes' 'lxdm-manjaro-theme')
-optdepends=('polkit-gnome: to run lxdm-config directly from menu')
+depends=('gtk2' 'xorg-server' 'iso-codes' 'adwaita-manjaro-themes' 'lxdm-manjaro-theme')
+optdepends=('lxpolkit: to run lxdm-config directly from menu'
+            'gtk-engines: default GTK+ theme'
+            'librsvg: display the default background')
 makedepends=('intltool')
 install=${pkgname}.install
 backup=('etc/lxdm/lxdm.conf' 'etc/pam.d/lxdm' 'etc/lxdm/Xsession'
         'etc/lxdm/PreLogin' 'etc/lxdm/LoginReady' 'etc/lxdm/PostLogin'
         'etc/lxdm/PostLogout' 'etc/lxdm/PreReboot' 'etc/lxdm/PreShutdown')
 source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz
-		lxdm.pam  lxdm.service
-		lxdm-0.4.1-Xsession-source-profile.patch
-		lxdm-0.4.1-conf.patch
-		lxdm-0.4.1-event-check-bug.patch
-		lxdm-0.4.1-industrial-greeter-ui.patch
-		lxdm-0.4.1-modern-systems.patch
-		lxdm-0.4.1-nolang-show-sessions.patch
-		lxdm-0.4.1-pam-env-vars.patch
-		lxdm-0.4.1-ecryptfs.patch
-		org.manjaro.pkexec.lxdm-config.policy
-                lxdm-config.desktop
-                #####################################
-                ## Custom Manjaro Login Pane Patch ##
-                #####################################
-                lxdm.login_pane.patch)
+        default-config.patch
+        git-fixes.patch
+        #####################################
+        ## Custom Manjaro Login Pane Patch ##
+        #####################################
+        lxdm.login_pane.patch
+        org.manjaro.pkexec.lxdm-config.policy
+        lxdm-config.desktop)
 
+prepare(){
+    cd "$srcdir/$pkgname-$pkgver"
 
-prepare() {
-    cd $srcdir/$pkgname-$pkgver
+    # Apply various fixes from git
+    patch -Np1 -i ../git-fixes.patch
 
-    patch -Np1 -i $srcdir/lxdm-0.4.1-event-check-bug.patch
-    patch -Np1 -i $srcdir/lxdm-0.4.1-nolang-show-sessions.patch
-    patch -Np1 -i $srcdir/lxdm-0.4.1-pam-env-vars.patch
-    patch -Np1 -i $srcdir/lxdm-0.4.1-ecryptfs.patch
+    # Adjust Manjaro-specific settings
+    patch -Np1 -i ../default-config.patch
+
+    # Fix version number
+    sed -i 's/3.6.0/3.8/' gnome-shell/LXDM_User_Switch@dgod/metadata.json
 
     #####################################
     ## Custom Manjaro Login Pane Patch ##
@@ -52,33 +50,26 @@ prepare() {
 }
 
 build() {
-    cd $srcdir/$pkgname-$pkgver
-    ./configure --sysconfdir=/etc --prefix=/usr --libexecdir=/usr/lib/lxdm \
-    --bindir=/usr/bin \
-    --sbindir=/usr/bin
+    cd "$srcdir/$pkgname-$pkgver"
+    autoreconf -fi
+    ./configure --prefix=/usr --sbindir=/usr/bin --libexecdir=/usr/lib/lxdm \
+                --sysconfdir=/etc --localstatedir=/var
     make
-  	
-    patch -Np0 -i $srcdir/lxdm-0.4.1-modern-systems.patch
-    patch -Np0 -i $srcdir/lxdm-0.4.1-conf.patch
-    patch -Np0 -i $srcdir/lxdm-0.4.1-Xsession-source-profile.patch
-    patch -Np0 -i $srcdir/lxdm-0.4.1-industrial-greeter-ui.patch
 }
 
-
 package() {
-    cd $srcdir/$pkgname-$pkgver
-    make DESTDIR=$pkgdir sbindir=/usr/bin install
+    cd "$srcdir/$pkgname-$pkgver"
+    make DESTDIR="$pkgdir" install
+    chmod 644 "$pkgdir/etc/lxdm/lxdm.conf"
 
-    install -m644 $srcdir/lxdm.pam $pkgdir/etc/pam.d/lxdm
-    install -Dm644 $srcdir/lxdm.service $pkgdir/usr/lib/systemd/system/lxdm.service
-    install -d $pkgdir/var/{lib,run}/lxdm
+    # Home directory
+    install -dm 755 "$pkgdir/var/lib/lxdm"
+    echo 'GDK_CORE_DEVICE_EVENTS=true' > "$pkgdir"/var/lib/lxdm/.pam_environment
+    chown -R 121:121 "$pkgdir/var/lib/lxdm"
 
-    # fix the greeter location
-    sed -i -e 's/local\/libexec/lib\/lxdm/' $pkgdir/etc/lxdm/lxdm.conf
-    sed -i 's:sbin:bin:' $pkgdir/usr/bin/lxdm
-
-    # avoid conflict with filesystem>=2012.06
-    rm -r $pkgdir/var/run
+    # GNOME Shell extension
+    mkdir -p "$pkgdir/usr/share/gnome-shell/extensions"
+    cp -r gnome-shell/LXDM_User_Switch@dgod "$pkgdir/usr/share/gnome-shell/extensions"
 
     # Fix logout behavior
     echo '#!/bin/sh' > "${pkgdir}/etc/lxdm/PostLogout"
@@ -103,16 +94,8 @@ package() {
 }
 
 sha256sums=('9e0d0a5672fcf31a18de8178ce73eab1723d6ae7097dfe41e9fe2c46e180cf08'
-            '3842c976b31a0f69caaf10272424dd396156ec7b36f918453da2e86d939d6082'
-            '28b8a9b1c18943529187973a4fdd9b8afe1050d45219886a46e4074e4bd4ea88'
-            'b901a2141f3becea005952f59d54c13357c0ba12e9ebbde24cf395a50ce748e2'
-            'f2f60852f0b556c49ec95c1b1cbf575e88ebe049718137aca068cd6fbec01189'
-            'c6a766502f18b6e073aa021d680bbb351791bf2646f6bdf6c9093ad2a83ddcbc'
-            'dbec8a2ea9f2366b9423537401595b0207c88675a254428c1402995f412cc3e4'
-            'c4dbea49b6b4cab407d621e868e1bda0111df1012a244abde36cac54ea4a5735'
-            '029c77c53c42188ce9fc3372c77aac942517e449d77be13717bb79108f9d4971'
-            'dd18af5704a9b52d0730508a7dae8604ae4e62c12a04dc386138fa082a5faff9'
-            'f7db74b542a6d614bc8cf2da4395e526e9c460a335dc558d15f6c0aeb1d321ac'
+            '8a0d64fe891343e8a20de3c6a63eb9436b0e49606b94adf8e5c3c0ee03ec454f'
+            '3c97a5ccfb2ec7d8ef94c1198cb6dd1a027eff339077cf2fb9c677c9e8be70d5'
+            '078b624d05a9a97414c48075c267fba4f7cfc21fec7f983de05fcc75a186d0c9'
             '21288b1de0354dfa3ee45c9c91552c3abb1e58aba48c70eb7b604b6e07e33ea1'
-            'ced6936b00b8e7cfd67b7be960e5e0f447581a03c1b19e34783257ed4b602db7'
-            '8f2112373bd0cca9509c0cfade7543dc875f5340bf9e796bc06a6d7e41149cf5')
+            'ced6936b00b8e7cfd67b7be960e5e0f447581a03c1b19e34783257ed4b602db7')
