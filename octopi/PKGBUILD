@@ -3,15 +3,15 @@
 
 pkgbase=octopi
 pkgname=('octopi' 'octopi-notifier')
-pkgver=0.2.0
+pkgver=0.2.902
 pkgrel=1
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
 url="http://octopiproject.wordpress.com"
 license=('GPL')
 depends=('qt4' 'pacman')
-_git=yes
-makedepends=('git')
+_git=no
+makedepends=('git' 'gdb')
 optdepends=('kdesu: for KDE'
             'gksu: for XFCE, Gnome, LXDE, Cinnamon'
             'gnome-keyring: for password management'
@@ -28,7 +28,7 @@ pkgver() {
      #echo "`git tag | tail -1 | sed 's|v||g'`.`git describe --always`"
      #echo "0.2.0.$(date +%m%d).`git describe --always`"
      #echo "0.2.0$(git describe --tags | sed 's|v||g' | sed 's|-|.|g')"
-     echo 0.2.0.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+     echo 0.2.901.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
   else
      echo "$pkgver"
   fi
@@ -38,18 +38,17 @@ build() {
     cpucount=$(grep -c processor /proc/cpuinfo 2>/dev/null)
     jc=$((${cpucount:-1}))
 
-    cd "${srcdir}/${pkgname}"
-
+    cd "${srcdir}/${pkgbase}"
     msg "Starting build..."
 
-    qmake-qt4 $pkgname.pro 	
+    qmake-qt4 $pkgname.pro
     make -j $jc
 
     cd notifier/pacmanhelper
     msg "Building pacmanhelper..."
     qmake-qt4 pacmanhelper.pro
-    make -j $jc    
-
+    make -j $jc
+    
     cd ../octopi-notifier
     msg "Building octopi-notifier..."
     qmake-qt4 octopi-notifier.pro
@@ -61,7 +60,9 @@ package_octopi() {
    #Octopi main files
    install -D -m755 bin/$pkgname ${pkgdir}/usr/bin/$pkgname
    install -D -m644 $pkgname.desktop ${pkgdir}/usr/share/applications/$pkgname.desktop
-   install -D -m644 resources/images/${pkgname}_yellow.png ${pkgdir}/usr/share/icons/$pkgname.png
+   install -D -m644 resources/images/${pkgname}_green.png ${pkgdir}/usr/share/icons/$pkgname.png
+   install -D -m644 resources/images/${pkgname}_red.png ${pkgdir}/usr/share/icons/${pkgname}_red.png
+   install -D -m644 resources/images/${pkgname}_yellow.png ${pkgdir}/usr/share/icons/${pkgname}_yellow.png
 
    #Pacmanhelper service files
    install -D -m755 notifier/bin/pacmanhelper ${pkgdir}/usr/lib/octopi/pacmanhelper
@@ -76,6 +77,7 @@ package_octopi-notifier() {
    pkgdesc="Notifier for Octopi"
    depends=('octopi' 'libnotify')
    optdepends=('xfce4-notifyd: for notifications in XFCE')
+
    cd "${srcdir}/${pkgbase}"
    #Octopi-notifier file
    install -D -m755 notifier/bin/octopi-notifier ${pkgdir}/usr/bin/octopi-notifier
