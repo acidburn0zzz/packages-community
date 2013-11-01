@@ -1,0 +1,33 @@
+# Maintainer: Philip Müller <philm_at_manjaro_dot_org>
+
+pkgname=gtk-theme-neuver
+pkgver=0.1
+_ver='ae325518dd0c52847a9e16d07cb0391942285fe5'
+pkgrel=1
+pkgdesc="Desktop suite for Xfce"
+arch=('any')
+url="http://git.manjaro.org/artwork/numix-manjaro-themes"
+license=('GPL3')
+depends=('gtk-engine-murrine')
+#makedepends=('git')
+conflicts=neuver-theme
+replaces=neuver-theme
+optdepends=('faenza-green-icon-theme: matching icon theme')
+
+source=("http://github.com/hashbit/Neuver/releases/download/0.1/Neuver_$pkgver.tar.gz")
+sha256sums=('cb795416c4cafb0a6196bdf7808cc0e0d830861b6b5954a82ce9334d83f5844e')
+
+package() {
+  cd "$srcdir/Neuver"
+
+  # create theme dirs
+  install -d -m 755 "$pkgdir"/usr/share/themes/Neuver
+
+  # install theme
+  cp -r . "$pkgdir"/usr/share/themes/Neuver
+
+  # clean up
+  rm -rf "$pkgdir"/usr/share/themes/{.git,.gitignore}
+}
+
+# vim:set ts=2 sw=2 et:

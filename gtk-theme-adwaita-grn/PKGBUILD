@@ -1,0 +1,21 @@
+# Maintainer: Frikilinux <frikilinux at gmail.com>
+# Contributor: bwat47 <bwat47 at gmail dot com>
+
+pkgname=gtk-theme-adwaita-grn
+pkgver=20131008
+pkgrel=1
+pkgdesc="A gtk2, gtk3, metacity, gnome-shell and unity theme..."
+arch=('any')
+url="http://gnome-look.org/content/show.php/Adwaita+GRN%2B?content=159001"
+license=('GPL3')
+depends=('gtk-engines' 'gtk-engine-murrine')
+options=('!strip')
+source=("$pkgname.tar.gz::http://gnome-look.org/CONTENT/content-files/159001-Adwaita%20GRN+.tar.gz")
+sha1sums=('4b99e71400a1187982869a13c5c933b95248a9c5')
+
+
+package() {
+  # install theme
+  find "Adwaita GRN+/" -type f -exec install -Dm644 "{}" "$pkgdir/usr/share/themes/{}" \;
+}
+

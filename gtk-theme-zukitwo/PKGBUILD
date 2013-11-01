@@ -1,0 +1,24 @@
+# Maintainer: OmeGa <omega at mailoo dot org>
+# Contributor: grimi <grimi at poczta dot fm>
+
+pkgname=gtk-theme-zukitwo
+pkgver=20131027
+pkgrel=1
+pkgdesc="A theme for GTK3, GTK2, Metacity, xfwm4, Gnome Shell and Unity."
+arch=('any')
+url="http://gnome-look.org/content/show.php/Zukitwo?content=140562"
+license=('GPL3')
+depends=('gtk-engine-murrine' 'gnome-themes-standard')
+optdepends=('ttf-droid: Font family for the Gnome Shell theme')
+provides=('zukitwo-themes')
+replaces=('zukitwo-themes')
+conflicts=('zukitwo-themes')
+source=($pkgname-$pkgver.zip::http://gnome-look.org/CONTENT/content-files/140562-Zukitwo.zip)
+sha256sums=('d1502d507625ac45c928f50744dcf228b2e3d27b559d5175aa5773b86beebfbc')
+
+package() {
+  cd "$srcdir"
+  find Zukitwo* -type f -exec install -Dm644 '{}' "$pkgdir/usr/share/themes/{}" \;
+}
+
+# vim:set ts=2 sw=2 et:

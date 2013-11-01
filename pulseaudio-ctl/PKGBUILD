@@ -1,0 +1,23 @@
+# Contributor: graysky <graysky AT archlinux dot us>
+pkgname=pulseaudio-ctl
+pkgver=1.33
+pkgrel=2
+pkgdesc='Control pulseaudio volume from the shell or mapped to keyboard shortcuts.  No need for alsa-utils.'
+arch=('any')
+license=('GPL')
+depends=('pulseaudio')
+conflicts=('pulseaudio_ctl')
+replaces=('pulseaudio_ctl')
+url=https://github.com/graysky2/pulseaudio_ctl
+source=("http://repo-ck.com/source/$pkgname/$pkgname-$pkgver.tar.xz"
+        "add-extra-switches.patch")
+sha256sums=('99fef3fdf8ab392657c7bb2b3578b67c04dbd764e273bcd834fe83a0fd243722'
+            '9e076095881ce4ac673945e56c15dd399d1a1fe7f3d0bd79cc8440c940eaf3a8')
+install=readme.install
+
+package() {
+  cd "$pkgname-$pkgver"
+  patch -Np1 -i "$srcdir/add-extra-switches.patch"
+  install -Dm755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm644 MIT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
