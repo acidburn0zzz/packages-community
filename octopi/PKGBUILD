@@ -4,7 +4,7 @@
 pkgbase=octopi
 pkgname=('octopi' 'octopi-notifier')
 pkgver=0.3.0
-pkgrel=1
+pkgrel=2
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
 url="http://octopiproject.wordpress.com"

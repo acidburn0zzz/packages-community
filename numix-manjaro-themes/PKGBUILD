@@ -1,9 +1,9 @@
 # Maintainer: Philip Müller <philm_at_manjaro_dot_org>
 
 pkgname=numix-manjaro-themes
-pkgver=20131029
-_ver='ae325518dd0c52847a9e16d07cb0391942285fe5'
-pkgrel=1
+pkgver=20131116
+_ver='8a017eb24e16c9d6f51430ef283f39fccca1c1e6'
+pkgrel=2
 pkgdesc="Desktop suite for Xfce"
 arch=('any')
 url="http://git.manjaro.org/artwork/numix-manjaro-themes"
@@ -13,10 +13,18 @@ makedepends=('git')
 optdepends=('faenza-green-icon-theme: matching icon theme')
 
 source=("$pkgname-$pkgver.tar.gz::http://git.manjaro.org/artwork/numix-manjaro-themes/repository/archive?ref=$_ver")
-sha256sums=('402fd40f1792cfca1717945d3266d4446c669e6cf37fa4f173c795c41b570efd')
+sha256sums=('49ff36fc81352908d13767c3ad77b9788174288e33e037297879c46d013a48bc')
 
 package() {
-  cd "$srcdir/numix-manjaro-themes"
+  if [ -e "$srcdir/core-$pkgname" ]; then
+	   cd "$srcdir/core-$pkgname"
+  fi
+  if [ -e "$srcdir/$pkgname" ]; then
+     cd "$srcdir/$pkgname"
+  fi
+  if [ -e "$srcdir/$pkgname.git" ]; then
+	   cd "$srcdir/$pkgname.git"
+  fi
 
   # create theme dirs
   install -d -m 755 "$pkgdir"/usr/share/themes
