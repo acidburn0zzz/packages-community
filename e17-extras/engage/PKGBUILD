@@ -6,7 +6,7 @@
 
 pkgname=engage
 pkgver=101
-ever=0.17.4
+ever=0.17.5
 pkgrel=1
 pkgdesc="Enlightenment e17 module: A taskbar and app-launcher dock, which makes use of composite."
 arch=('i686' 'x86_64')

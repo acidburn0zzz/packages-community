@@ -6,7 +6,7 @@
 
 pkgname=forecasts
 pkgver=216
-ever=0.17.4
+ever=0.17.5
 pkgrel=1
 pkgdesc="Enlightenment e17 module: A simple and useful weather forecasts"
 arch=('i686' 'x86_64')

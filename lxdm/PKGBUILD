@@ -6,7 +6,7 @@
 
 pkgname=lxdm
 pkgver=0.4.1
-pkgrel=29
+pkgrel=30
 pkgdesc='Lightweight X11 Display Manager'
 arch=('i686' 'x86_64')
 url="http://sourceforge.net/projects/lxdm/"
@@ -24,6 +24,8 @@ backup=('etc/lxdm/lxdm.conf' 'etc/pam.d/lxdm' 'etc/lxdm/Xsession'
 source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz
         default-config.patch
         git-fixes.patch
+        lxdm.pam
+        Xsession
         #####################################
         ## Custom Manjaro Login Pane Patch ##
         #####################################
@@ -40,8 +42,9 @@ prepare(){
     # Adjust Manjaro-specific settings
     patch -Np1 -i ../default-config.patch
 
-    # Fix version number
-    sed -i 's/3.6.0/3.8/' gnome-shell/LXDM_User_Switch@dgod/metadata.json
+    # Use our custom pam and Xsession files
+    cp ../lxdm.pam pam/lxdm
+    cp ../Xsession data/Xsession
 
     #####################################
     ## Custom Manjaro Login Pane Patch ##
@@ -67,9 +70,9 @@ package() {
     echo 'GDK_CORE_DEVICE_EVENTS=true' > "$pkgdir"/var/lib/lxdm/.pam_environment
     chown -R 121:121 "$pkgdir/var/lib/lxdm"
 
-    # GNOME Shell extension
-    mkdir -p "$pkgdir/usr/share/gnome-shell/extensions"
-    cp -r gnome-shell/LXDM_User_Switch@dgod "$pkgdir/usr/share/gnome-shell/extensions"
+    ############################
+    ## Custom Manjaro Changes ##
+    ############################
 
     # Fix logout behavior
     echo '#!/bin/sh' > "${pkgdir}/etc/lxdm/PostLogout"
@@ -94,8 +97,10 @@ package() {
 }
 
 sha256sums=('9e0d0a5672fcf31a18de8178ce73eab1723d6ae7097dfe41e9fe2c46e180cf08'
-            '8a0d64fe891343e8a20de3c6a63eb9436b0e49606b94adf8e5c3c0ee03ec454f'
-            '3c97a5ccfb2ec7d8ef94c1198cb6dd1a027eff339077cf2fb9c677c9e8be70d5'
+            '20e67bbc9dcb930d5127591918da64c516d9252371c0a3a57e565f7912ddb430'
+            'd8d7955ea6a5c11766b7016ae7aa57c444c9c5309087776466964d581ba9190f'
+            'e8c4c5fd3b801a390d201166fd1fb9730e78a5c62928768103b870b6bd980ea0'
+            '8c7e42ff271c8d0f7f3cfe11aca7f92f411bf5be1d86135f558b8e413e53dd30'
             '078b624d05a9a97414c48075c267fba4f7cfc21fec7f983de05fcc75a186d0c9'
             '21288b1de0354dfa3ee45c9c91552c3abb1e58aba48c70eb7b604b6e07e33ea1'
             'ced6936b00b8e7cfd67b7be960e5e0f447581a03c1b19e34783257ed4b602db7')
