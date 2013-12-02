@@ -1,0 +1,37 @@
+# Maintainer: Guinux <nuxgui@gmail.com>
+# Co-Maintainer: Clittle <philm@manjaro.org>
+
+pkgbase=manjarobox-artwork
+pkgname=('manjarobox-artwork')
+pkgver=1.0
+pkgrel=1
+arch=('any')
+url="http://manjaro.org"
+makedeps=('imagemagick')
+source=("$pkgbase-$pkgver.tar.gz"
+)
+sha256sums=(
+            'SKIP'
+)
+
+package_manjarobox-artwork() {
+  pkgdesc="Artwork for ManjaroBox"
+  license=('GPL')
+  for i in $(ls ${srcdir}/$pkgbase-$pkgver/*.png | awk -F"/" '{print $NF}' | sed s'/.png//'g)
+  do
+      convert "${srcdir}/$pkgbase-$pkgver/${i}.png" "${srcdir}/$pkgbase-$pkgver/${i}.jpg"
+  done
+  install -Dm644 "${srcdir}/$pkgbase-$pkgver/background.jpg" "${pkgdir}/usr/share/backgrounds/manjarobox1.jpg" 
+  install -Dm644 "${srcdir}/$pkgbase-$pkgver/dark-vines.jpg" "${pkgdir}/usr/share/backgrounds/dark-vines.jpg" 
+  install -Dm644 "${srcdir}/$pkgbase-$pkgver/light-vines.jpg" "${pkgdir}/usr/share/backgrounds/light-vines.jpg" 
+  install -Dm644 "${srcdir}/$pkgbase-$pkgver/manjarobox2.jpg" "${pkgdir}/usr/share/backgrounds/manjarobox2.jpg" 
+  install -Dm644 "${srcdir}/$pkgbase-$pkgver/ManjaroBox.jpg" "${pkgdir}/usr/share/backgrounds/ManjaroBox.jpg" 
+  install -Dm644 "${srcdir}/$pkgbase-$pkgver/ManjaroShadow-Minus.jpg" "${pkgdir}/usr/share/backgrounds/ManjaroShadow-Minus.jpg" 
+  install -Dm644 "${srcdir}/$pkgbase-$pkgver/ManjaroShadow-Plus.jpg" "${pkgdir}/usr/share/backgrounds/ManjaroShadow-Plus.jpg" 
+  # link for xfce
+  mkdir -p "${pkgdir}/usr/share/backgrounds/xfce"
+  for i in $(ls ${pkgdir}/usr/share/backgrounds/*.* | awk -F"/" '{print $NF}')
+  do
+      ln -s "../${i}" "${pkgdir}/usr/share/backgrounds/xfce/${i}"
+  done
+}
