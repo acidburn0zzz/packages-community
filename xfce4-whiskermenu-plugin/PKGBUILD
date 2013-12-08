@@ -3,7 +3,7 @@
 # Contributor: Diego Principe <cdprincipe@at@gmail@dot@com>
 
 pkgname=xfce4-whiskermenu-plugin
-pkgver=1.2.0
+pkgver=1.2.2
 pkgrel=1
 pkgdesc="Alternate Xfce menu"
 arch=('i686' 'x86_64')
@@ -21,14 +21,14 @@ if [ "$_git" == "yes" ]; then
 else
    makedepends=('cmake')
    source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
-   md5sums=('bf57b4c8cc629c93ee435e7ac5d46b45')
-   sha256sums=('71e75c2cff3ec0df001cef628e77904fd45dfba3f788c6aa2be19273df91208e')
+   md5sums=('1498c725fe6568aa0740649fd99e5e49')
+   sha256sums=('452f16ffee61bef1b0e2583ba2445536bf2d4bd58627ff68b112f920c6aedf8c')
 fi
 
 pkgver() {
   cd ${srcdir}/${pkgname}
   if [ "$_git" == "yes" ]; then
-     echo 1.2.0.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+     echo 1.2.2.$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
   else
      echo "$pkgver"
   fi
