@@ -1,0 +1,19 @@
+# Author: novodereshkin - http://opendesktop.org/content/show.php?content=161861
+# Edited by tulliana
+
+pkgname=kde-theme-violet-pastel
+pkgver=1.0
+pkgrel=1
+pkgdesc="Violet Pastel"
+arch=('any')
+url="http://opendesktop.org/content/show.php?content=161861"
+license=('CCPL')
+depends=('kdebase-workspace')
+source=("https://copy.com/haP0cfmsd7TW/VioletPastel.tar.gz?download=1")
+md5sums=('d53a38784adf81318497f0cb7700a391')
+
+package() {
+   cd $startdir/src/VioletPastel
+   install -dm755  $pkgdir/usr/share/apps/desktoptheme/VioletPastel
+   cp -rf  * $pkgdir/usr/share/apps/desktoptheme/VioletPastel
+}

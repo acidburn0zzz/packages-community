@@ -1,0 +1,19 @@
+# Author: vicko - http://opendesktop.org/content/show.php?content=109660
+# Edited by tulliana
+
+pkgname=kdeplasma-theme-cupertino-ish
+pkgver=1.0
+pkgrel=1
+pkgdesc="cupertino-ish"
+arch=('any')
+url="http://opendesktop.org/content/show.php?content=109660"
+license=('CCPL')
+depends=('kdebase-workspace')
+source=("http://opendesktop.org/CONTENT/content-files/109660-cupertino-ish.tar.gz")
+md5sums=('38d283638a03f6ebe2d53b8d8ac0c958')
+
+package() {
+   cd $startdir/src/cupertino-ish
+   install -dm755  $pkgdir/usr/share/apps/aurorae/themes/cupertino-ish
+   cp -rf  * $pkgdir/usr/share/apps/aurorae/themes/cupertino-ish
+}
