@@ -3,7 +3,7 @@
 
 pkgbase=octopi
 pkgname=('octopi' 'octopi-notifier')
-pkgver=0.3.0
+pkgver=0.3.1pre1
 pkgrel=2
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
@@ -17,7 +17,7 @@ optdepends=('kdesu: for KDE'
             'yaourt: for AUR support'
             'octopi-notifier: for notifications'
             'pkgfile: to view uninstalled pkg contents in Manjaro Linux')
-_git=no
+_git=Yes
 
 if [ "$_git" == "Yes" ]; then
    source=(git+http://github.com/aarnt/octopi.git)

@@ -4,13 +4,15 @@
 
 pkgname=kdeicons-kfaenza
 pkgver=0.8.9
-pkgrel=1
+pkgrel=2
 pkgdesc="KFaenza Icons"
 arch=('any')
 url="http://kde-look.org/content/show.php?action=content&content=160955"
 license=('CCPL')
 depends=('kdebase-workspace')
-source=("https://copy.com/gw2iV3NkZ1ss/KFaenza.tar.gz?download=1")
+conflicts=('kfaenza-icon-theme')
+provides=('kfaenza-icon-theme')
+source=("$pkgname-$pkgver.tar.gz::https://copy.com/gw2iV3NkZ1ss/KFaenza.tar.gz?download=1")
 md5sums=('1bb0175f71a74e277da4c222b22401f1')
 
 package() {
