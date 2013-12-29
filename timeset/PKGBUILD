@@ -1,16 +1,17 @@
 # Maintainer: aaditya  aaditya_gnulinux@zoho.com
 
 pkgname=timeset
-pkgver=1.4
+pkgver=1.4.1
 pkgrel=1
+_snapshot=4674d3e242fce22bd9db79b42682369306d75c6e
 pkgdesc="A script for managing system date and time."
 url="http://git.manjaro.org/aadityabagga/timeset/"
 arch=('any')
 license=('GPL')
 depends=('bash')
 optdepends=('ntp')
-source=("http://git.manjaro.org/aadityabagga/timeset/repository/archive")
-sha1sums=('SKIP')
+   source=("$pkgname-$pkgver-$pkgrel.tar.gz::http://git.manjaro.org/aadityabagga/$pkgname/repository/archive?ref=$_snapshot")
+   sha256sums=('c2053b1512453d0195ab1b4b6cdb64acb8a6d05ceab32b52622d20fb3edc1a8a')
 
 package() {
   cd "${srcdir}/${pkgname}.git"
