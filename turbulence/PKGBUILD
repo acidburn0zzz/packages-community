@@ -2,10 +2,12 @@
 
 pkgname=turbulence
 pkgver=0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="System configurer at boot for KDE, similar to Chakra's Kapudan."
 url="http://manjaro.org"
-depends=('python2' 'python2-pyqt4' 'pyqt4-common' 'qt4')
+depends=('python2' 'python2-pyqt4' 'pyqt4-common' 'qt4' 'kdeplasma-theme-cupertino-ish')
+conflicts=('kdeplasma-theme-ghost-deco')
+provides=('kdeplasma-theme-ghost-deco')
 license=('GPL')
 arch=('any')
 
@@ -23,26 +25,33 @@ else
 fi
 
 package() {
-    if [ -e "$srcdir/core-$pkgname" ]; then
-       cd "$srcdir/core-$pkgname"
+    if [ -e "$srcdir/community-$pkgname" ]; then
+       _dir="$srcdir/community-$pkgname"
+       cd $_dir
     fi
     if [ -e "$srcdir/$pkgname" ]; then
-       cd "$srcdir/$pkgname"
+       _dir="$srcdir/$pkgname"
+       cd $_dir
     fi
     if [ -e "$srcdir/$pkgname.git" ]; then
-       cd "$srcdir/$pkgname.git"
+       _dir="$srcdir/$pkgname.git"
+       cd $_dir
     fi
     mkdir -p $pkgdir/usr/bin
     mkdir -p $pkgdir/usr/share/turbulence
     mkdir -p $pkgdir/usr/share/apps/aurorae/themes
     mkdir -p $pkgdir/usr/share/wallpapers
-    mv $srcdir/turbulence/turbulence $pkgdir/usr/bin/turbulence
-    mv $srcdir/turbulence/themes/* $pkgdir/usr/share/apps/aurorae/themes
-    mv $srcdir/turbulence/wallpapers/* $pkgdir/usr/share/wallpapers
-    rm -r $srcdir/turbulence/themes
-    rm -r $srcdir/turbulence/wallpapers
+    mv $_dir/turbulence $pkgdir/usr/bin/turbulence
+    mv $_dir/themes/* $pkgdir/usr/share/apps/aurorae/themes
+
+    # needs to be removed from git
+    rm -r $pkgdir/usr/share/apps/aurorae/themes/cupertino-ish
+
+    mv $_dir/wallpapers/* $pkgdir/usr/share/wallpapers
+    rm -r $_dir/themes
+    rm -r $_dir/wallpapers
     chmod +x $pkgdir/usr/bin/turbulence
-    cp -r $srcdir/turbulence/* $pkgdir/usr/share/turbulence
+    cp -r $_dir/* $pkgdir/usr/share/turbulence
     chmod +x $pkgdir/usr/share/turbulence/turbulencerunner
     chmod +x $pkgdir/usr/share/turbulence/install.sh
 }
