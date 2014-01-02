@@ -11,17 +11,17 @@ provides=('kdeplasma-theme-ghost-deco')
 license=('GPL')
 arch=('any')
 
-_git=no
-_snapshot=8cafd54f748d3d2edf31889b732e91a3a4b984b8
+_git="Yes"
+_snapshot=fdfdf62f6861d0d8a9cb282cc6322a99b60163c0
 
 if [ "$_git" == "Yes" ]; then
    source=(git+http://git.manjaro.org/community/turbulence.git)
    sha256sums=('SKIP')
 else
    #source=("turbulence-$pkgver.tar.gz::http://git.manjaro.org/community/turbulence/repository/archive?ref=v$pkgver")
-   #sha256sums=('6e980a909f4a680194a96e3cf1364a826b7ddebc48cad61e3cb6ec4bcc115910')
+   #sha256sums=('646bad5c4bb8b1b2fa049ae75a7e0adadeef791b222477ffd95a7e7da4b248ad')
    source=("turbulence-$pkgver-$pkgrel.tar.gz::http://git.manjaro.org/community/turbulence/repository/archive?ref=$_snapshot")
-   sha256sums=('914c9b61cd3dab3fa4b1b235b19856d88c32561c71c08bbb19a9fbee0fbe13d5')
+   sha256sums=('646bad5c4bb8b1b2fa049ae75a7e0adadeef791b222477ffd95a7e7da4b248ad')
 fi
 
 build() {
@@ -37,41 +37,24 @@ build() {
        _dir="$srcdir/$pkgname.git"
        cd $_dir
     fi
-    # compile translation files
-    for files in tr/*; do
-    if [ -f "$files" ]; then
-         STRING=`echo ${files#*/}`
-         /usr/lib/qt4/bin/lrelease tr/${STRING}
-         echo "${STRING} installed..."
-         rm tr/${STRING}
-    fi
-    done
+    
+    lrelease-qt4 tr/*
 }
 
 package() {
-    if [ -e "$srcdir/community-$pkgname" ]; then
-       _dir="$srcdir/community-$pkgname"
-       cd $_dir
-    fi
-    if [ -e "$srcdir/$pkgname" ]; then
-       _dir="$srcdir/$pkgname"
-       cd $_dir
-    fi
-    if [ -e "$srcdir/$pkgname.git" ]; then
-       _dir="$srcdir/$pkgname.git"
-       cd $_dir
-    fi
     mkdir -p $pkgdir/usr/bin
     mkdir -p $pkgdir/usr/share/turbulence
     mkdir -p $pkgdir/usr/share/apps/aurorae/themes
     mkdir -p $pkgdir/usr/share/wallpapers
-    mv $_dir/turbulence $pkgdir/usr/bin/turbulence
-    mv $_dir/themes/* $pkgdir/usr/share/apps/aurorae/themes
-    mv $_dir/wallpapers/* $pkgdir/usr/share/wallpapers
-    rm -r $_dir/themes
-    rm -r $_dir/wallpapers
+    mv turbulence/* $pkgdir/usr/share/turbulence
+    mv $pkgdir/usr/share/turbulence/turbulence $pkgdir/usr/bin/turbulence
+    mv $pkgdir/usr/share/turbulence/themes/* $pkgdir/usr/share/apps/aurorae/themes
+
+    mv $pkgdir/usr/share/turbulence/wallpapers/* $pkgdir/usr/share/wallpapers
+    rm -r $pkgdir/usr/share/turbulence/themes
+    rm -r $pkgdir/usr/share/turbulence/wallpapers
     chmod +x $pkgdir/usr/bin/turbulence
-    cp -r $_dir/* $pkgdir/usr/share/turbulence
+    cp -r * $pkgdir/usr/share/turbulence
     chmod +x $pkgdir/usr/share/turbulence/turbulencerunner
     chmod +x $pkgdir/usr/share/turbulence/install.sh
 }
