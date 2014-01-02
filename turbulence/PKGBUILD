@@ -55,7 +55,7 @@ package() {
        cd $_dir
     fi
 
-    if [ -e "$srcdir/$_dir/.git" ]; then
+    if [ -e "$_dir/.git" ]; then
        rm -r $_dir/.git
     fi
 
