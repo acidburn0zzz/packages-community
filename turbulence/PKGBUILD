@@ -55,6 +55,10 @@ package() {
        cd $_dir
     fi
 
+    if [ -e "$srcdir/$_dir/.git" ]; then
+       rm -r $_dir/.git
+    fi
+
     mkdir -p $pkgdir/usr/bin
     mkdir -p $pkgdir/usr/share/turbulence
     mkdir -p $pkgdir/usr/share/apps/aurorae/themes
