@@ -1,0 +1,38 @@
+pkgname=i-nex-dev
+pkgver=0.6.0
+_git=419c327c60156b12b845f5a49f68883c093e0dd0
+pkgrel=1
+pkgdesc="System information tool like hardinfo, sysinfo"
+arch=('any')
+url="http://tuxportal.pl/"
+license=('LGPL3')
+depends=('gambas3-runtime' 'gambas3-gb-image' 'gambas3-gb-gtk' 'gambas3-gb-form'
+         'gambas3-gb-desktop' 'gambas3-gb-settings' 'gambas3-gb-form-dialog' 'gambas3-gb-qt4'
+         'gambas3-gb-form-mdi' 'gambas3-gb-form-stock' 'util-linux' 'procps' 'python2'
+         'xorg-server-utils' 'gksu' 'lsb-release' 'coreutils' 'pciutils' 'inetutils' 'mesa-demos')
+makedepends=('gambas3-devel' 'gcc')
+source=("$pkgname-$pkgver-$pkgrel.tar.gz::https://github.com/eloaders/I-Nex/archive/$_git.tar.gz")
+sha256sums=('SKIP')
+provides=(i-nex)
+conflicts=(i-nex)
+
+build() {
+  cd "$srcdir/I-Nex-$_git/src/i-nex"
+
+  gbc3 -eagtpmv
+  gba3
+}
+
+package() {
+  cd "$srcdir/I-Nex-$_git"
+
+  sed -i 's|i-nex.gambas|i-nex|' debian/i-nex.desktop
+
+  install -Dm755 src/i-nex/i-nex.gambas "$pkgdir/usr/bin/i-nex"
+  install -Dm644 src/i-nex/logo/i-nex.0.4.x.png "$pkgdir/usr/share/pixmaps/i-nex.0.4.x.png"
+  install -Dm644 debian/i-nex.desktop "$pkgdir/usr/share/applications/i-nex.desktop"
+  install -dm755 "$pkgdir/usr/share/i-nex/pastebinit"
+  cp -rf pastebin.d pastebinit{,.xml} release.conf "$pkgdir/usr/share/i-nex/pastebinit"
+
+  sed -i 's|python$|python2|' "$pkgdir/usr/share/i-nex/pastebinit/pastebinit"
+} 
