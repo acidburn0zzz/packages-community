@@ -3,7 +3,7 @@
 
 pkgbase=octopi
 pkgname=('octopi' 'octopi-notifier')
-pkgver=0.3.1pre2
+pkgver=0.3.1rc1
 pkgrel=1
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
@@ -18,7 +18,7 @@ optdepends=('kdesu: for KDE'
             'octopi-notifier: for notifications'
             'pkgfile: to view uninstalled pkg contents in Manjaro Linux')
 _git=no
-_snapshot=9124d2f1e2629dbad27968430668ce3ce075c43e
+_snapshot=9af37e9401eaa96337fbd9029b63fa46710b72ed
 
 if [ "$_git" == "Yes" ]; then
    source=(git+http://github.com/aarnt/octopi.git)
@@ -27,7 +27,7 @@ else
    #source=("octopi-$pkgver.tar.gz::https://github.com/aarnt/octopi/archive/v$pkgver.tar.gz")
    #sha256sums=('357dd1318f9f88910bfc53a5085d300a2f2468f85c0d58feafb67f423e8f603b')
    source=("octopi-$pkgver-$pkgrel.tar.gz::https://github.com/aarnt/octopi/archive/$_snapshot.tar.gz")
-   sha256sums=('e7d572af1b2911e2ed45bd69b736ee3b0a9ad9c933457be90be68c6cde358e2a')
+   sha256sums=('359dab2023cbe8fcc4bcf1da7005892a181e4fc8bc856244dc9c8b041bf66087')
 fi
 
 pkgver() {

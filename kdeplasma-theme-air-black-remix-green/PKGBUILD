@@ -1,0 +1,19 @@
+# Author: Strahlex - http://opendesktop.org/content/show.php?content=147631
+# Edited by tulliana
+
+pkgname=kdeplasma-theme-air-black-remix-green
+_themename=Air-black-remix-green
+pkgver=1.0
+pkgrel=1
+pkgdesc="Air-black-remix-green"
+arch=('any')
+url="http://opendesktop.org/content/show.php?content=147631"
+license=('CCPL')
+depends=('kdebase-workspace')
+source=("http://opendesktop.org/CONTENT/content-files/147631-Air-black-remix-green.tar.gz")
+md5sums=('77ff364ab64c7281c3524305dfc20a26')
+
+package() {
+   install -dm755  $pkgdir/usr/share/apps/aurorae/themes
+   cp -rf  $srcdir/Air-black-remix-green $pkgdir/usr/share/apps/aurorae/themes
+}

@@ -1,0 +1,54 @@
+#
+# maintainer: Philip Müller <philm[at]manjaro[dog]org>
+# maintainer: Kyle <kyle[at]gmx[dog]ca>
+
+pkgbase=sonarlinux-profiles
+pkgname=('sonarlinux-profiles')
+pkgver=0.8.r13.$(date +%m%d)
+pkgrel=1
+arch=('any')
+url="https://gitorious.org/sonariso/"
+license=('GPL')
+makedepends=('git')
+_git=Yes
+_gitbranch=upstream
+_gitver=c1a5114fefed86cce5ec1f48ed49c96561e54b1f
+
+if [ "$_git" == "snapshot" ]; then
+   source=("sonarlinux-profiles-$_gitver.tar.gz::https://gitorious.org/sonariso/sonariso/archive/$_gitver.tar.gz")
+   sha256sums=('SKIP')
+fi
+
+if [ "$_git" == "Yes" ]; then
+   source=(git+https://git.gitorious.org/sonariso/sonariso.git)
+   sha256sums=('SKIP')
+fi
+
+if [ "$_git" == "No" ]; then
+   source=("sonarlinux-profiles-$pkgver.tar.gz::https://gitorious.org/sonariso/sonariso/archive/$pkgver.tar.gz")
+   sha256sums=('SKIP')
+fi
+
+prepare() {
+	if [ "$_gitbranch" != "None" ]; then
+		cd "$srcdir/sonariso"
+		git checkout $_gitbranch
+	fi
+}
+
+package_sonarlinux-profiles() {
+  pkgdesc="Sonar Linux Profiles"
+  depends=('manjaroiso-profiles>=0.8.8')
+  if [ -e "$srcdir/sonariso" ]; then
+     cd "$srcdir/sonariso"
+  fi
+  if [ -e "$srcdir/sonariso.git" ]; then
+	   cd "$srcdir/sonariso.git"
+  fi
+  mkdir -p $pkgdir/usr/share/manjaroiso/configs
+  for conf in gnome-sonar shared-sonar
+  do
+      cp -r configs/${conf} $pkgdir/usr/share/manjaroiso/configs/${conf}
+  done
+  ln -sfv /usr/share/manjaroiso $pkgdir/usr/share/sonariso
+}

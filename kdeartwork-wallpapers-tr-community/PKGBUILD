@@ -1,0 +1,18 @@
+# Artworks: tulliana <mdemiray@msn.com> emireis <emireis@yahoo.com.tr>
+
+pkgname=kdeartwork-wallpapers-tr-community
+_themename=wallpapers
+pkgver=1.0
+pkgrel=1
+pkgdesc="TR Community wallpapers for Manjaro"
+arch=('any')
+url="http://manjaro-tr.org"
+license=('CCPL')
+depends=('kdebase-workspace')
+source=($pkgname-$pkgver.tar.gz::https://copy.com/zMMrFTM3WgII/community-wallpapers.tar.gz?download=1)
+md5sums='480a8c7ca0d65ccf7da22b117285c0a6'
+
+package() {
+  install -dm755 $pkgdir/usr/share/
+  mv $srcdir/$_themename $pkgdir/usr/share/
+} 

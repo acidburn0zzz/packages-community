@@ -3,7 +3,7 @@
 # Contributor: Diego Principe <cdprincipe@at@gmail@dot@com>
 
 pkgname=xfce4-whiskermenu-plugin
-pkgver=1.3.0
+pkgver=1.3.1
 pkgrel=1
 pkgdesc="Alternate Xfce menu"
 arch=('i686' 'x86_64')
@@ -12,7 +12,7 @@ license=('GPL2')
 depends=('xfce4-panel')
 options=('!makeflags')
 install=${pkgname}.install
-_git=yes
+_git=no
 
 if [ "$_git" == "yes" ]; then
    makedepends=('cmake' 'git')
@@ -21,8 +21,7 @@ if [ "$_git" == "yes" ]; then
 else
    makedepends=('cmake')
    source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
-   md5sums=('1498c725fe6568aa0740649fd99e5e49')
-   sha256sums=('452f16ffee61bef1b0e2583ba2445536bf2d4bd58627ff68b112f920c6aedf8c')
+   sha256sums=('f393ddf8015061d26fbef72c1a99ff59752c65ae5a12ec62bb2b3ee7ddbd687c')
 fi
 
 pkgver() {

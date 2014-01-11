@@ -1,0 +1,19 @@
+# Author: LycusHackerEmo - http://opendesktop.org/content/show.php?content=160956
+# Edited by tulliana
+
+pkgname=kdeartwork-colorschemes-oxygreen
+_themename=OxyGreen
+pkgver=1.0
+pkgrel=1
+pkgdesc="OxyGreen"
+arch=('any')
+url="http://opendesktop.org/content/show.php?content=160956"
+license=('CCPL')
+depends=('kdebase-workspace')
+source=("https://copy.com/rEIEu1rltDvn/kde-color-scheme-oxygreen.tar.gz?download=1")
+md5sums=('699454ae98f5f0bc19a772cbaafcce23')
+
+package() {
+   install -dm755  $pkgdir/usr/share/apps/
+   cp -rf  $srcdir/color-schemes $pkgdir/usr/share/apps/
+}
