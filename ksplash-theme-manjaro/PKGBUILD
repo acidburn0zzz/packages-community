@@ -1,7 +1,7 @@
 # Artworks:  tulliana <sonageldik@gmail.com>
 
 pkgname=ksplash-theme-manjaro
-pkgver=1.0
+pkgver=1.0.1
 pkgrel=1
 pkgdesc="Manjaro Style KSplash"
 arch=('any')
@@ -9,7 +9,7 @@ url="http://bilgegunluk.com"
 license=('CCPL')
 depends=('kdebase-workspace')
 source=("$pkgname-$pkgver.tar.gz::https://content.wuala.com/contents/tulliana/artwork/kdm-splash/manjaro-style-ksplash.tar.gz/?dl=1")
-md5sums=('1db92fb6ef6cfd8a7e7b8f7745377ac9')
+md5sums=('11b0759c5c98a0c0c805e0bf4f713b2a')
 
 package() {
    cd $startdir/src/manjaro-style-ksplash

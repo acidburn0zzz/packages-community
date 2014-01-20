@@ -2,7 +2,7 @@
 
 pkgname=turbulence-evolution
 pkgver=0.2.0
-pkgrel=1.2
+pkgrel=2
 pkgdesc="System configurer at boot for Openbox, similar to Chakra's Kapudan."
 url="http://manjaro.org"
 depends=('python2' 'python2-pyqt4' 'pyqt4-common' 'qt4' 'tint2' 'lxappearance')
