@@ -9,7 +9,7 @@
 
 pkgname=compiz-xfce
 pkgver=0.8.9
-pkgrel=18
+pkgrel=19
 pkgdesc="Compiz compositing window manager (all required 0.8.x packages merged) - optimized for Xfce"
 arch=('i686' 'x86_64')
 url="http://cgit.compiz.org/"
