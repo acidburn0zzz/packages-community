@@ -5,10 +5,10 @@
 # Maintainer: Philip Müller <philm[at]manjaro[dot]org>
 
 pkgname=forecasts
-pkgver=216
-ever=0.18.2
-pkgrel=1
-pkgdesc="Enlightenment e17 module: A simple and useful weather forecasts"
+pkgver=221.a169559
+ever=0.18.3
+pkgrel=2
+pkgdesc="Enlightenment e18 module: A simple and useful weather forecasts"
 arch=('i686' 'x86_64')
 url="http://git.enlightenment.org/enlightenment/modules/$pkgname.git"
 license=('MIT')
@@ -23,7 +23,7 @@ md5sums=('SKIP')
 pkgver() {
   cd "$pkgname"
   # Use the tag of the last commit
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  #echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {

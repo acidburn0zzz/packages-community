@@ -1,75 +1,80 @@
 # Maintainer: dcell <sesshomaru@hushmail.com>
-
 pkgname=turbulence
-pkgver=0.2.4
+pkgver=0.3.1
 pkgrel=1
-pkgdesc="System configurer at boot for KDE, similar to Chakra's Kapudan."
+pkgdesc="System configurer at boot for KDE and OpenBox, similar to Chakra's Kapudan."
 url="http://manjaro.org"
-depends=('python2' 'python2-pyqt4' 'pyqt4-common' 'qt4' 'kdeplasma-theme-cupertino-ish')
-conflicts=('kdeplasma-theme-ghost-deco')
-provides=('kdeplasma-theme-ghost-deco')
+depends=('python2' 'python2-pyqt4' 'pyqt4-common' 'qt4'  'wmctrl')
+optdepends=('kdeplasma-theme-cupertino-ish' 'lxterminal')
+conflicts=('turbulence-evolution' 'kdeplasma-theme-ghost-deco')
+provides=('turbulence-evolution' 'kdeplasma-theme-ghost-deco')
 license=('GPL')
 arch=('any')
 
 _git="no"
-_snapshot=8cafd54f748d3d2edf31889b732e91a3a4b984b8
+_snapshot=652e53441d0248d5a3aae7ccb68f11bf65e88c94
 
-if [ "$_git" == "Yes" ]; then
-   source=(git+http://git.manjaro.org/community/turbulence.git)
-   sha256sums=('SKIP')
+if [ "$_git" == "yes" ]; then
+    source=(git+http://git.manjaro.org/community/turbulence.git)
+    sha256sums=('SKIP')
 else
-   source=("turbulence-$pkgver.tar.gz::http://git.manjaro.org/community/turbulence/repository/archive?ref=v$pkgver")
-   sha256sums=('7a386734b02f1e85d8be72da12aa41af5a773125ede30f3167d2a7f1dad30d1f')
-   #source=("turbulence-$pkgver-$pkgrel.tar.gz::http://git.manjaro.org/community/turbulence/repository/archive?ref=$_snapshot")
-   #sha256sums=('914c9b61cd3dab3fa4b1b235b19856d88c32561c71c08bbb19a9fbee0fbe13d5')
+    source=("turbulence-$pkgver.tar.gz::http://git.manjaro.org/community/turbulence/repository/archive.tar.gz?ref=v$pkgver")
+    sha256sums=('98dfb429894242b1d6e5395160a461ce9713e84713304a19565597c28822b5a0')
+    #source=("turbulence-$pkgver-$pkgrel.tar.gz::http://git.manjaro.org/community/turbulence/repository/archive.zip?ref=$_snapshot")
+    #sha256sums=('98dfb429894242b1d6e5395160a461ce9713e84713304a19565597c28822b5a0')
 fi
 
 build() {
     if [ -e "$srcdir/community-$pkgname" ]; then
-       _dir="$srcdir/community-$pkgname"
-       cd $_dir
+        _dir="$srcdir/community-$pkgname"
+        cd $_dir
     fi
     if [ -e "$srcdir/$pkgname" ]; then
-       _dir="$srcdir/$pkgname"
-       cd $_dir
+        _dir="$srcdir/$pkgname"
+        cd $_dir
     fi
     if [ -e "$srcdir/$pkgname.git" ]; then
-       _dir="$srcdir/$pkgname.git"
-       cd $_dir
+        _dir="$srcdir/$pkgname.git"
+        cd $_dir
     fi
-    
+
     lrelease-qt4 tr/*
 }
 
 package() {
     if [ -e "$srcdir/community-$pkgname" ]; then
-       _dir="$srcdir/community-$pkgname"
-       cd $_dir
+        _dir="$srcdir/community-$pkgname"
+        cd $_dir
     fi
     if [ -e "$srcdir/$pkgname" ]; then
-       _dir="$srcdir/$pkgname"
-       cd $_dir
+        _dir="$srcdir/$pkgname"
+        cd $_dir
     fi
     if [ -e "$srcdir/$pkgname.git" ]; then
-       _dir="$srcdir/$pkgname.git"
-       cd $_dir
+        _dir="$srcdir/$pkgname.git"
+        cd $_dir
     fi
 
     if [ -e "$_dir/.git" ]; then
-       rm -r $_dir/.git
+        rm -r $_dir/.git
     fi
 
     mkdir -p $pkgdir/usr/bin
     mkdir -p $pkgdir/usr/share/turbulence
     mkdir -p $pkgdir/usr/share/apps/aurorae/themes
     mkdir -p $pkgdir/usr/share/wallpapers
+    mkdir -p $pkgdir/usr/share/backgrounds
+    
     mv $_dir/* $pkgdir/usr/share/turbulence
     mv $pkgdir/usr/share/turbulence/turbulence $pkgdir/usr/bin/turbulence
     mv $pkgdir/usr/share/turbulence/themes/* $pkgdir/usr/share/apps/aurorae/themes
-
     mv $pkgdir/usr/share/turbulence/wallpapers/* $pkgdir/usr/share/wallpapers
+    mv $pkgdir/usr/share/turbulence/backgrounds/* $pkgdir/usr/share/backgrounds
+    
     rm -r $pkgdir/usr/share/turbulence/themes
     rm -r $pkgdir/usr/share/turbulence/wallpapers
+    rm -r $pkgdir/usr/share/turbulence/backgrounds
+    
     chmod +x $pkgdir/usr/bin/turbulence
     chmod +x $pkgdir/usr/share/turbulence/turbulencerunner
     chmod +x $pkgdir/usr/share/turbulence/install.sh
