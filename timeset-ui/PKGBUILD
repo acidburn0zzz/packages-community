@@ -1,16 +1,17 @@
-#Maintainer: aaditya	  aaditya_gnulinux@zoho.com
+# Maintainer: aaditya <aaditya_gnulinux@zoho.com>
 
 pkgname=timeset-gui
 pkgver=1.7
-pkgrel=1
+pkgrel=2
+_snapshot=4a660b783c6c3547e2a9c9239b2be3185a374ef2
 pkgdesc="A python-gui for managing system date and time."
-url="http://git.manjaro.org/aadityabagga/timeset-gui"
+url="http://git.manjaro.org/community/timeset-gui"
 arch=('any')
 license=('GPL')
-depends=('gksu' 'python' 'python-gobject' 'pywebkitgtk')
-optdepends=('ntp')
-source=("http://git.manjaro.org/aadityabagga/timeset-gui/repository/archive")
-sha1sums=('SKIP')
+depends=('gksu' 'python2-gobject' 'ntp')
+optdepends=()
+source=("$pkgname-$pkgver-$pkgrel.tar.gz::http://git.manjaro.org/community/$pkgname/repository/archive.zip?ref=$_snapshot")
+sha1sums=('c6ae1b63c0738b9ce892e568d4cbc6c6ba3f7d76')
 package() {
   cd "${srcdir}/${pkgname}.git"
   install -Dm755 "${pkgname}" "${pkgdir}/usr/bin/${pkgname}"
