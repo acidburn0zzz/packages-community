@@ -1,0 +1,23 @@
+# Maintainer: Rob McCathie <rob@manjaro.org>
+
+pkgname=nouvegnomegray-icon-theme
+pkgver=20140227
+pkgrel=1
+pkgdesc="nouveGnomeGray is a light gray icon set for GNOME, to be used with dark GTK themes"
+arch=('any')
+url="http://tsujan.deviantart.com/art/nouveGnomeGray-300365158"
+license=("CCPL:cc-by-nc-sa")
+#depends=('')
+#makedepends=('')
+#optdepends=('')
+#conflicts=('')
+#provides=('')
+#replaces=('')
+#install="$pkgname".install
+source=("http://fc00.deviantart.net/fs70/f/2014/057/0/c/nouvegnomegray_by_tsujan-d4ytv8m.7z")
+sha1sums=('aab12d4c1170d9215c42ce1bdbf225789b38ac44')
+
+package() {
+  mkdir -p "$pkgdir"/usr/share/icons
+  cp -r "$srcdir"/nouveGnomeGray "$pkgdir"/usr/share/icons
+}
