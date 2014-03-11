@@ -1,6 +1,6 @@
 # Maintainer: Rob McCathie <rob@manjaro.org>
 
-pkgname=e18-a18darkmanjaro-theme
+pkgname=e18-theme-a18darkmanjaro
 pkgver=1.0
 pkgrel=1
 pkgdesc="Modified version of the default E18 Dark theme, from the Manjaro Enlightenment Edition"
