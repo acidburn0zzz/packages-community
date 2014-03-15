@@ -1,0 +1,8 @@
+post_install() {
+  echo ""
+  echo "Ensure ~/.elementary/themes/ exists!"
+  echo "You can make sure by running:"
+  echo ""
+  echo "mkdir -p ~/.elementary/themes"
+  echo ""
+}

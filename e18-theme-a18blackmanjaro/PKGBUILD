@@ -1,0 +1,22 @@
+# Maintainer: Rob McCathie <rob@manjaro.org>
+
+pkgname=e18-theme-a18blackmanjaro
+pkgver=1.0
+pkgrel=0.1
+pkgdesc="Theme from the Manjaro Enlightenment Edition"
+arch=('any')
+url="http://http://forum.manjaro.org/index.php?topic=2380.msg103950#msg103950"
+license=('BSD')
+#depends=('enlightenment')
+#makedepends=('')
+optdepends=("enlightenment: Just in case you actually want to use the theme")
+#conflicts=('')
+#provides=('')
+replaces=('e18-theme-a18darkmanjaro')
+install="$pkgname".install
+source=("A-18-Black-Manjaro.edj")
+sha1sums=('541a775d0b8c01d5768330aa0f3ba4676513ee22')
+
+package() {
+  install -Dm644 "$srcdir"/A-18-Black-Manjaro.edj "$pkgdir"/usr/share/elementary/themes/A-18-Black-Manjaro.edj
+}
