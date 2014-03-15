@@ -1,12 +1,13 @@
-# Maintainer: Doug Newgard <scimmia22 at outlook dot com>
+# Maintainer: Rob McCathie <rob@manjaro.org>
+# Contributor: Doug Newgard <scimmia22 at outlook dot com>
 # Contributor: meklu <meklu at meklu dot org>
 # Contributor: Samsagax <samsagax at gmail dot com>
 # Contributor: Swift Geek <swiftgeek+spam@gmail.com>
 
 _pkgname=entrance
-pkgname=$_pkgname-git
+pkgname=$_pkgname-git-manjaro
 pkgver=0.0.99.r98.1160e12
-pkgrel=1
+pkgrel=0.1
 pkgdesc="Enlightenment Display Manager"
 url="http://www.enlightenment.org/"
 license=('GPL3')
@@ -15,10 +16,13 @@ depends=('elementary' 'xorg-xauth')
   [[ (! $(pacman -T ekbd-svn)) || (! $(pacman -T ekbd-git)) ]] && depends+=('ekbd-git')
 makedepends=('git')
 provides=("$_pkgname=$pkgver")
-conflicts=("$_pkgname")
+conflicts=("$_pkgname" "$_pkgname-git")
+replaces=("$_pkgname-git")
 backup=('etc/entrance.conf')
-source=("git://git.enlightenment.org/misc/$_pkgname.git")
-sha256sums=('SKIP')
+source=("git://git.enlightenment.org/misc/$_pkgname.git"
+        'manjaro_default.edj')
+sha1sums=('SKIP'
+          'da7a25c8dc1eca5175164246f9e6b51e5fb11522')
 
 pkgver() {
   cd "$srcdir/$_pkgname"
@@ -64,4 +68,8 @@ package() {
   install -Dm644 ChangeLog "$pkgdir/usr/share/doc/$_pkgname/ChangeLog"
   install -Dm644 NEWS "$pkgdir/usr/share/doc/$_pkgname/NEWS"
   install -Dm644 README "$pkgdir/usr/share/doc/$_pkgname/README"
+  
+# change default theme for Manjaro
+  rm "$pkgdir"/usr/share/entrance/themes/default.edj
+  cp "$srcdir"/manjaro_default.edj "$pkgdir"/usr/share/entrance/themes/default.edj
 }
