@@ -1,17 +1,17 @@
 # Maintainer: aaditya <aaditya_gnulinux[at]zoho[dot]com
 
 pkgname=allservers
-pkgver=1.2
+pkgver=1.3
 pkgrel=1
-_snapshot=5fdbd60536c76329dcf0bb6c392d846a437536eb
+_snapshot=8878c650a0456870199698382ca0cf5909e64197
 pkgdesc="Script to manage pacman mirrorlist, update using pacman & yaourt and manage pacman cache"
 url="http://forum.manjaro.org/index.php?topic=1289.0"
 arch=('any')
 license=('GPL')
 depends=('pacman-mirrorlist')
 optdepends=('yaourt' 'pkgcacheclean')
-source=("http://git.manjaro.org/aadityabagga/allservers/raw/$_snapshot/allservers.sh")
-sha1sums=('6f11ca027b1fad00a4ed1aad911249a97ef4bd0c4b6f443ff967c6c526c52fe1')
+source=("http://git.manjaro.org/community/allservers/raw/$_snapshot/allservers.sh")
+sha1sums=('10a0960bf94e64cef07b50f18464f72bfe09a538')
 
 package() {
 install -Dm755 "${pkgname}.sh" "${pkgdir}/usr/bin/${pkgname}"
