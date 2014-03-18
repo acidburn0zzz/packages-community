@@ -1,0 +1,5 @@
+[Desktop Entry]
+Type=Application
+Name=Fusion Icon
+Comment=Simple tray icon for Compiz
+Exec=fusion-icon

@@ -1,0 +1,30 @@
+# Maintainer : Rob McCathie <rob@manjaro.org>
+# Contributor: Ronald van Haren <ronald.archlinux.org>
+# Contributor: JJDaNiMoTh <jjdanimoth@gmail.com>
+# Contributor: nesl247 <nesl247@gmail.com>
+
+# Note this package does not track the AUR one of the same name.
+
+pkgname=compizconfig-python
+pkgver=0.8.4.git
+pkgrel=1
+pkgdesc="Compizconfig bindings for python"
+arch=('i686' 'x86_64')
+url="http://opencompositing.org"
+license=('GPL')
+depends=('compiz-core' 'libcompizconfig' 'glib2' 'python2' 'libxrandr')
+makedepends=('intltool' 'pkgconfig' 'pyrex')
+conflicts=('compizconfig-python-git')
+source=("http://cgit.compiz.org/compiz/compizconfig/compizconfig-python/snapshot/compizconfig-python-7d36bcb9d0c44bf1bfc905e60f809934fdee840d.tar.bz2")
+sha1sums=('e0dd434c9a6d4cd64bf6628aa6ebd38fde23d5a5')
+
+build() {
+  cd "$srcdir/compizconfig-python-7d36bcb9d0c44bf1bfc905e60f809934fdee840d"
+  PYTHON=python2 ./autogen.sh --prefix=/usr
+  make
+}
+
+package() {
+  cd "$srcdir/compizconfig-python-7d36bcb9d0c44bf1bfc905e60f809934fdee840d"
+  make DESTDIR="$pkgdir" install
+}

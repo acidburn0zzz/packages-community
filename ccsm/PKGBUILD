@@ -1,0 +1,38 @@
+# Maintainer : Rob McCathie <rob@manjaro.org>
+# Contributor: OS Hazard <oshazard+aur@gmail.com>
+# Contributor: Ronald van Haren <ronald.archlinux.org>
+# Contributor: JJDaNiMoTh <jjdanimoth@gmail.com>
+# Contributor: nesl247 <nesl247@gmail.com>
+
+# Note this package does not track the AUR one of the same name.
+
+pkgname=ccsm
+pkgver=0.8.4.git
+pkgrel=1
+pkgdesc="Compizconfig Settings Manager in Python2"
+arch=('any')
+url="http://opencompositing.org"
+license=('GPL')
+depends=('compizconfig-python>=0.8.4' 'pygtk' 'protobuf')
+makedepends=('intltool')
+conflicts=('ccsm-git')
+provides=('ccsm')
+source=("http://cgit.compiz.org/compiz/compizconfig/ccsm/snapshot/ccsm-2513000801e72a0e035ba408f5a5fa7458c19c30.tar.bz2")
+install=ccsm.install
+sha1sums=('2f79b1130c457a3c48bb3e3bdfa8c5b544e1c3c9')
+
+prepare() {
+  cd "$srcdir/ccsm-2513000801e72a0e035ba408f5a5fa7458c19c30"
+  # python2 fix
+  for file in $(find . -name '*.py' -print); do
+    sed -i 's_^#!.*/usr/bin/python_#!/usr/bin/python2_' $file
+    sed -i 's_^#!.*/usr/bin/env.*python_#!/usr/bin/env python2_' $file
+  done
+}
+
+package() {
+  cd "$srcdir/ccsm-2513000801e72a0e035ba408f5a5fa7458c19c30"
+  python2 ./setup.py install --prefix=/usr --root="${pkgdir}"
+  # Make ccsm icon appear in Xfce settings manager
+  sed -i 's|Categories=Compiz;Settings;DesktopSettings;|Categories=Compiz;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-OtherSettings;|' "${pkgdir}"/usr/share/applications/ccsm.desktop
+}

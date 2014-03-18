@@ -1,0 +1,75 @@
+# Maintainer : Rob McCathie <rob@manjaro.org>
+# Contributor: Dan Fuhry <dan@fuhry.com>
+# Contributor: Ronald van Haren <ronald.archlinux.org>
+# Contributor: Hussam Al-Tayeb ht990332@gmail.com
+# Contributor: Khashayar Naderehvandi <khashayar [at] naderehvandi [dot] net>
+# Contributor: JJDaNiMoTh <jjdanimoth.aur@gmail.com>
+
+pkgname=compiz-mate
+pkgver=0.8.9
+pkgrel=1
+pkgdesc="Compiz compositing window manager - patched with full MATE support"
+url="http://www.compiz.org/"
+license=('GPL' 'LGPL' 'MIT')
+arch=('i686' 'x86_64')
+makedepends=('intltool')
+depends=('startup-notification' 'librsvg' 'libgl' 'dbus' 'glu' 'libxslt' 'fuse' 'mate-control-center' 'gconf' 'libwnck' 'mate-window-manager')
+install="$pkgname".install
+options=(!emptydirs)
+conflicts=('compiz-core' 'compiz-decorator-gtk')
+provides=("compiz-core=$pkgver" 'compiz-decorator-gtk')
+replaces=('compiz-core-mate')
+source=(http://cgit.compiz.org/compiz/core/snapshot/core-compiz-${pkgver}.tar.bz2
+        compiz-gcc-4.7.patch
+        mate-migrate.sh)
+sha1sums=('f48b7cb7e98efd4e6967f07967ac9078127123c0'
+          '2138342ae9f253bae003e96e91fdd0bc9918291a'
+          '654ba5e540aa839791dc4c8aed1ddede8dec2033')
+
+prepare() {
+  cd "$srcdir/core-compiz-$pkgver"
+
+  patch -p0 -i ../compiz-gcc-4.7.patch
+  
+  ${srcdir}/mate-migrate.sh .
+  mv gtk/gnome gtk/mate
+}
+
+build() {
+  cd "$srcdir/core-compiz-$pkgver"
+  
+  export CFLAGS="-DHAVE_MARCO_2_17_0"
+
+  ./autogen.sh   --prefix=/usr \
+	    --enable-gnome \
+	    --enable-gtk \
+	    --enable-marco \
+	    --enable-gconf \
+            --with-gconf-schema-file-dir=/etc/gconf/schemas \
+	    --enable-dbus \
+	    --enable-librsvg \
+	    --disable-kde \
+	    --disable-kde4
+
+  make QDBUSXML2CPP=/usr/bin/qdbusxml2cpp-qt4
+}
+
+
+
+package() {
+  cd "$srcdir/core-compiz-$pkgver"
+  make DESTDIR="$pkgdir" install
+  pushd gtk
+  make DESTDIR="$pkgdir" install
+  install -Dm644 window-decorator/gwd.schemas "$pkgdir/usr/share/gconf/schemas/gwd.schemas"
+  popd
+  for i in dbus gconf ini inotify png regex svg glib kconfig
+  do
+    rm "$srcdir"/core-compiz-$pkgver/metadata/compiz-$i.schemas
+  done
+  gconf-merge-schema "${pkgdir}"/usr/share/gconf/schemas/compiz-decorator-gtk.schemas "${srcdir}"/core-compiz-$pkgver/metadata/*.schemas
+  make DESTDIR="$pkgdir" install
+   
+  # install MIT license
+  install -Dm644 "$srcdir/core-compiz-0.8.9/COPYING.MIT" "$pkgdir/usr/share/licenses/compiz/COPYING.MIT"
+}

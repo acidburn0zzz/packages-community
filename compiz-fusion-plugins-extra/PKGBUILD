@@ -1,0 +1,38 @@
+# Maintainer : Rob McCathie <rob@manjaro.org>
+# Contributor: Ronald van Haren <ronald.archlinux.org>
+# Contributor: JJDaNiMoTh <jjdanimoth@gmail.com>
+# Contributor: nesl247 <nesl247@gmail.com>
+
+# Note this package does not track the AUR one of the same name.
+
+pkgname=compiz-fusion-plugins-extra
+pkgver=0.8.8.git
+pkgrel=1
+pkgdesc="Compiz Fusion Extra plugins"
+arch=('i686' 'x86_64')
+url="http://www.compiz.org"
+license=('GPL')
+depends=('compiz-core' 'compiz-bcop' 'compiz-fusion-plugins-main' 'libnotify' 'glu' 'libxslt' 'startup-notification' 'libsm' 'gtk2')
+makedepends=('intltool' 'pkg-config' 'gettext' 'gconf')
+conflicts=('compiz-fusion-plugins-extra-git')
+source=("http://cgit.compiz.org/fusion/plugins-extra/snapshot/plugins-extra-3cbf4eccecb07fc6f7a2697a072831872d071c06.tar.bz2"
+        'notification.patch')
+sha1sums=('5347c50b823ef2abcc17737d6dc90b2ec5ed5e03'
+          '11ea02ce12711df9f5e306d96036a7d4b1c4a217')
+
+prepare() {
+  cd "$srcdir/plugins-extra-3cbf4eccecb07fc6f7a2697a072831872d071c06"
+  patch -p1 -i $srcdir/notification.patch
+  sed -i 's/iconUri, NULL);/iconUri);/' src/notification/notification.c
+}
+
+build() {
+  cd "$srcdir/plugins-extra-3cbf4eccecb07fc6f7a2697a072831872d071c06"
+  ./autogen.sh --prefix=/usr
+  make
+}
+
+package() {
+  cd "$srcdir/plugins-extra-3cbf4eccecb07fc6f7a2697a072831872d071c06"
+  make DESTDIR="${pkgdir}" install
+}

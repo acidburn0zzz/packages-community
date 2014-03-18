@@ -1,0 +1,38 @@
+# Maintainer : Rob McCathie <rob@manjaro.org>
+# Contributor: Ronald van Haren <ronald.archlinux.org>
+# Contributor: JJDaNiMoTh <jjdanimoth@gmail.com>
+# Contributor: nesl247 <nesl247@gmail.com>
+
+# Note this package does not track the AUR one of the same name.
+
+pkgname=compiz-fusion-plugins-main
+pkgver=0.8.8.git
+pkgrel=1
+pkgdesc="Compiz Fusion Main plugins"
+arch=('i686' 'x86_64')
+url="http://www.compiz.org"
+license=('GPL')
+depends=('compiz-core' 'libjpeg>=7' 'librsvg' 'compiz-bcop' 'libxdamage' 'libxcomposite' 'libxinerama' 'startup-notification' 'libxrandr' 'glu' 'libsm' 'libxslt')
+makedepends=('intltool' 'pkgconfig' 'gettext')
+conflicts=('compiz-fusion-plugins-main-git')
+source=("http://cgit.compiz.org/fusion/plugins-main/snapshot/plugins-main-611295a4d4a9dce76316056c79741c387979e730.tar.bz2"
+        'expo_defaults.patch')
+sha1sums=('1c1b72f3e9b9045ffcaa35958db637ecaf7c048d'
+          '6cbff060ef855997d504b27d0f30d4ee775c2ba4')
+
+prepare() {
+  cd "$srcdir/plugins-main-611295a4d4a9dce76316056c79741c387979e730"
+  # Turn off expo reflection
+  patch -Np1 -i "${srcdir}/expo_defaults.patch"
+}
+
+build() {
+  cd "$srcdir/plugins-main-611295a4d4a9dce76316056c79741c387979e730"
+  ./autogen.sh --prefix=/usr --sysconfdir=/etc
+  make
+}
+
+package() {
+  cd "$srcdir/plugins-main-611295a4d4a9dce76316056c79741c387979e730"
+  make DESTDIR="${pkgdir}" install
+}
