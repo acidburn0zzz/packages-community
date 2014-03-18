@@ -7,7 +7,7 @@
 
 pkgname=compiz-mate
 pkgver=0.8.9
-pkgrel=1
+pkgrel=2
 pkgdesc="Compiz compositing window manager - patched with full MATE support"
 url="http://www.compiz.org/"
 license=('GPL' 'LGPL' 'MIT')
@@ -49,8 +49,8 @@ build() {
 	    --enable-dbus \
 	    --enable-librsvg \
 	    --disable-kde \
-	    --disable-kde4
-
+	    --disable-kde4 \
+        --with-default-plugins="decoration,resize,place,move,switcher"
   make QDBUSXML2CPP=/usr/bin/qdbusxml2cpp-qt4
 }
 
