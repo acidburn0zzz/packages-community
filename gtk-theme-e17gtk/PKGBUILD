@@ -1,13 +1,13 @@
 # Maintainer: Rob McCathie <rob@manjaro.org>
 
 pkgname=gtk-theme-e17gtk
-pkgver=20140225.2
+pkgver=20140319
 pkgrel=1
 pkgdesc="E17gtk is a dark Gtk theme with sharp corners, which is designed for use in Enlightenment (E17) and gives the elegant look of E17 to Gtk3, Gtk2 and Qt widgets."
 arch=('any')
 url="http://gnome-look.org/content/show.php/E17gtk?content=163472"
 license=('GPL')
-depends=('gtk3')
+#depends=('')
 #makedepends=('')
 #optdepends=('')
 #conflicts=('')
@@ -15,7 +15,7 @@ depends=('gtk3')
 #replaces=('')
 #install="$pkgname".install
 source=("http://gnome-look.org/CONTENT/content-files/163472-E17gtk.tar.xz")
-sha1sums=('9202a553ca36f7271ed40f43d035c0387d08c4ce')
+sha1sums=('cc33f6bc26b23c2b395ded7a31203ad6f2693995')
 
 package() {
   mkdir -p "$pkgdir"/usr/share/themes
