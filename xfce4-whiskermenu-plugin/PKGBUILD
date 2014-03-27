@@ -3,8 +3,8 @@
 # Contributor: Diego Principe <cdprincipe@at@gmail@dot@com>
 
 pkgname=xfce4-whiskermenu-plugin
-pkgver=1.3.1
-pkgrel=2
+pkgver=1.3.2
+pkgrel=1
 pkgdesc="Alternate Xfce menu"
 arch=('i686' 'x86_64')
 url="http://gottcode.org/${pkgname}/"
@@ -21,10 +21,10 @@ if [ "$_git" == "yes" ]; then
    sha256sums=('SKIP')
 else
    makedepends=('cmake')
-   #source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
-   #sha256sums=('f393ddf8015061d26fbef72c1a99ff59752c65ae5a12ec62bb2b3ee7ddbd687c')
-   source=("$pkgname-$pkgver-$pkgrel.tar.gz::https://github.com/gottcode/xfce4-whiskermenu-plugin/archive/$_snapshot.tar.gz")
-   sha256sums=('73fa829b95eabc949632aa4d67a01b03022474d5901eb6d199e452c42775ca90')
+   source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
+   sha256sums=('a104b2266675a3ea3c7b98aab7b075a351d813ea29098504031a62f365e5a0fc')
+   #source=("$pkgname-$pkgver-$pkgrel.tar.gz::https://github.com/gottcode/xfce4-whiskermenu-plugin/archive/$_snapshot.tar.gz")
+   #sha256sums=('73fa829b95eabc949632aa4d67a01b03022474d5901eb6d199e452c42775ca90')
 fi
 
 #pkgver() {
@@ -39,7 +39,7 @@ fi
 build() {
   if [ "$_git" == "yes" ]; then
      cd ${srcdir}/${pkgname}
-  elseif
+  elif [ -e ${srcdir}/${pkgname}-${pkgver} ]; then
      cd ${srcdir}/${pkgname}-${pkgver}
   else
      cd ${srcdir}/${pkgname}-${_snapshot}
@@ -51,7 +51,7 @@ build() {
 package() {
   if [ "$_git" == "yes" ]; then
      cd ${srcdir}/${pkgname}
-  elseif
+  elif [ -e ${srcdir}/${pkgname}-${pkgver} ]; then
      cd ${srcdir}/${pkgname}-${pkgver}
   else
      cd ${srcdir}/${pkgname}-${_snapshot}

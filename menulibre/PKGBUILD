@@ -2,13 +2,13 @@
 
 pkgname=menulibre
 pkgver=2.0
-pkgrel=1
+pkgrel=2
 epoch=1
 pkgdesc="An advanced menu editor that provides modern features in a clean, easy-to-use interface. All without GNOME dependencies"
 arch=('any')
 url="https://launchpad.net/menulibre"
 license=('GPL3')
-depends=('gdk-pixbuf2' 'gnome-menus' 'gsettings-desktop-schemas' 'gtksourceview3' 'python' 'python-gobject' 'python-psutil')
+depends=('gdk-pixbuf2' 'gnome-menus' 'gsettings-desktop-schemas' 'gtksourceview3' 'python>=3.4' 'python-gobject' 'python-psutil')
 makedepends=('python-distutils-extra')
 source=("https://launchpad.net/$pkgname/$pkgver/$pkgver.0/+download/$pkgname-$pkgver.tar.gz"
         "xfce-fix.patch::http://bazaar.launchpad.net/~menulibre-dev/menulibre/master/diff/101")
