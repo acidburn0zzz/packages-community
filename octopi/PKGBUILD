@@ -3,7 +3,7 @@
 
 pkgbase=octopi
 pkgname=('octopi' 'octopi-notifier')
-pkgver=0.3.2
+pkgver=0.4.0pre3
 pkgrel=1
 pkgdesc="A pacman frontend using Qt libs"
 arch=('i686' 'x86_64')
@@ -16,8 +16,9 @@ optdepends=('kdesu: for KDE'
             'gnome-keyring: for password management'
             'yaourt: for AUR support'
             'octopi-notifier: for notifications'
+            'pacmanlogviewer: to view pacman log files'
             'pkgfile: to view uninstalled pkg contents in Manjaro Linux')
-_git=no
+_git=Yes
 _snapshot=a2f52ba68816e80279772b4c387f922491fb6097
 
 if [ "$_git" == "Yes" ]; then
@@ -78,6 +79,11 @@ build() {
    msg "Building octopi-notifier..."
    qmake-qt4 octopi-notifier.pro
    make -j $jc
+
+   cd ../../repoeditor
+   msg "Building octopi-repoeditor..."
+   qmake-qt4 repoeditor.pro
+   make -j $jc
 }
 
 package_octopi() {
@@ -106,6 +112,9 @@ package_octopi() {
    install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.conf ${pkgdir}/etc/dbus-1/system.d/org.octopi.pacmanhelper.conf
    install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.xml ${pkgdir}/usr/share/dbus-1/interfaces/org.octopi.pacmanhelper.xml
    install -D -m644 notifier/pacmanhelper/polkit/org.octopi.pacmanhelper.service ${pkgdir}/usr/share/dbus-1/system-services/org.octopi.pacmanhelper.service
+
+   #Pacmaneditor files
+   install -D -m755 repoeditor/bin/octopi-repoeditor ${pkgdir}/usr/bin/octopi-repoeditor
 }
 
 package_octopi-notifier() {
