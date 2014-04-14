@@ -1,0 +1,170 @@
+# Maintainer : Rob McCathie <rob@manjaro.org>
+# Contributor: Charles Bos <charlesbos1 AT gmail>
+# Contributor: Iven Hsu <ivenvd AT gmail>
+
+pkgname=compiz09-manjaro-test
+pkgver=3856
+pkgrel=1
+_bzrname=compiz
+_bzrbranch=0.9.11
+pkgdesc="Compiz 0.9.11 development branch. Includes saner/nicer defaults, GWD theme selector and autostart for Xfce."
+arch=('i686' 'x86_64')
+url="https://launchpad.net/compiz"
+license=('GPL' 'LGPL' 'MIT')
+depends=('boost' 'xorg-server' 'libxcomposite' 'startup-notification' 'librsvg' 'dbus' 'mesa' 'libxslt' 'fuse' 'glibmm' 'libxrender' 'gmock' 'libwnck' 'pygtk' 'desktop-file-utils' 'pyrex' 'protobuf' 'metacity' 'gconf' 'gnome-themes-standard' 'glu' 'dconf' 'libsm' 'zenity')
+#makedepends=('cmake' 'bzr' 'intltool')
+makedepends=('cmake' 'intltool')
+conflicts=('compiz-core-bzr' 'compiz-core-devel' 'compiz-core' 'compiz-gtk-standalone' 'compiz-xfce' 'compiz-mate' 'compiz-fusion-plugins-main' 'compiz-fusion-plugins-extra' 'compiz-fusion-plugins-unsupported' 'compiz-decorator-gtk' 'compiz-decorator-kde' 'libcompizconfig' 'compizconfig-python' 'compizconfig-backend-gconf' 'compiz-bcop' 'ccsm')
+provides=('compiz-core-bzr' 'compiz-bzr' 'compiz-core-devel')
+source=(#"$_bzrname::bzr+http://bazaar.launchpad.net/~compiz-team/$_bzrname/$_bzrbranch/"
+        "$_bzrname.tar.gz::http://bazaar.launchpad.net/~compiz-team/compiz/0.9.11/tarball/$pkgver"
+        'compiz-gtk-decorator-theme-selector'
+        'compiz-gtk-decorator-theme.desktop'
+        'compiz-manjaro.theme.gschema.override'
+        'compiz-standalone-defaults.patch'
+        'compiz-xfce-autostart'
+        'compiz-xfce-autostart.desktop'
+        "xfce-theme-greybird.tar.gz::https://github.com/shimmerproject/Greybird/archive/v1.2.2.tar.gz")
+sha1sums=('63ca3b226095dabf9b07faf67cd4dc92182768a9'
+          '6a8f9f30becdc0713f1da0b8a1105295f1014dc2'
+          '9b3dd487e9142e826848dc6b5d95a98fbb648f3c'
+          'd0d8b5fecf0ef2856eed89132066c2cc365441f7'
+          '1f69621d3ff3002dfaf25b58f1f67c96035ac277'
+          '46dc02d4033849cda551e930f772dc73fdf12c36'
+          'a790b6556695b06af4eff910e7dc409aab85f9a8'
+          '57a827b34b58f03e692262a6746b394cb70149dc')
+install='compiz-core-bzr.install'
+
+# GTK window decorator support
+GTKWINDOWDECORATOR="On"
+# Metaciy theme support for GTK window decorator
+METACITY="On"
+# KDE window decorator support
+KDEWINDOWDECORATOR="Off"
+# GConf backend support
+GCONF="On"
+# GSettings backend support
+GSETTINGS="On"
+
+# Do some basic option validation in order to handle build failures a bit more elegantly.
+
+if [ "${GTKWINDOWDECORATOR}" == "on" ]; then
+  CHECKGCONF=`pacman -Q gconf 2>/dev/null`
+  if [ ! "${CHECKGCONF}" ]; then
+    msg "Currently, gconf must be installed in order to build gtk-window-decorator."
+    exit 1
+  fi
+  if [ "${GCONF}" != "on" ]; then
+    msg "Currently, GCONF must be 'on' in order to build gtk-window-decorator."
+    exit 1
+  fi
+fi
+
+if [ "${GSETTINGS}" == "on" ]; then
+  if [ "${GCONF}" != "on" ]; then
+    msg "Currently, GCONF must be 'on' in order to enable gsettings support."
+    exit 1
+  fi
+fi
+
+pkgver() {
+  cd $_bzrname
+  bzr revno
+}
+
+prepare() {
+  ## Comment these out if using VCS source download (if you uncommented it in the source array)
+  mv "$srcdir/~compiz-team/$_bzrname/$_bzrbranch" "$srcdir/$_bzrname"
+  rm -r "$srcdir"/~compiz-team
+  
+  cd $_bzrname
+  
+  ## Manjaro-Xfce stuff
+  # Change default GWD/Metacity theme
+  #sed -i 's|Adwaita|compiz-xfce-greybird|' ./gtk/window-decorator/gwd-settings-interface.c
+  # Fix decorator default command
+  #sed -i 's|exec \\"${COMPIZ_BIN_PATH}compiz-decorator\\"|compiz-decorator|' ./plugins/decor/decor.xml.in
+  # Some saner/nicer defaults
+  patch -Np1 -i "${srcdir}/compiz-standalone-defaults.patch"
+
+  export PYTHON="/usr/bin/python2"
+
+  find -type f \( -name 'CMakeLists.txt' -or -name '*.cmake' \) -exec sed -e 's/COMMAND python/COMMAND python2/g' -i {} \;
+  find compizconfig/ccsm -type f -exec sed -e 's|^#!.*python|#!/usr/bin/env python2|g' -i {} \;
+
+  mkdir build; cd build
+  cmake .. \
+    -DCMAKE_INSTALL_PREFIX="/usr" \
+    -DPYTHON_INCLUDE_DIR=/usr/include/python2.7 \
+    -DPYTHON_LIBRARY=/usr/lib/libpython2.7.so \
+    -DQT_QMAKE_EXECUTABLE=qmake-qt4 \
+    -DCOMPIZ_DISABLE_SCHEMAS_INSTALL=On \
+    -DCOMPIZ_BUILD_WITH_RPATH=Off \
+    -DCOMPIZ_PACKAGING_ENABLED=On \
+    -DBUILD_GTK="${GTKWINDOWDECORATOR}" \
+    -DBUILD_METACITY="${METACITY}" \
+    -DBUILD_KDE4="${KDEWINDOWDECORATOR}" \
+    -DUSE_GCONF="${GCONF}" \
+    -DUSE_GSETTINGS="${GSETTINGS}" \
+    -DCOMPIZ_BUILD_TESTING=Off \
+    -DCOMPIZ_WERROR=Off \
+    -DCOMPIZ_DEFAULT_PLUGINS="composite,opengl,decor,resize,place,move,ccp"
+}
+
+build() {
+  cd $_bzrname/build
+  make
+}
+
+package() {
+  cd $_bzrname/build
+  make DESTDIR="${pkgdir}" install
+
+  # Stupid findcompiz_install needs COMPIZ_DESTDIR and install needs DESTDIR
+  # make findcompiz_install
+  CMAKE_DIR=$(cmake --system-information | grep '^CMAKE_ROOT' | awk -F\" '{print $2}')
+  install -dm755 "${pkgdir}${CMAKE_DIR}/Modules/"
+  install -m644 ../cmake/FindCompiz.cmake "${pkgdir}${CMAKE_DIR}/Modules/"	
+
+  # Add documentation
+  install -dm755 "${pkgdir}/usr/share/doc/compiz/"
+  install ../{AUTHORS,NEWS,README} "${pkgdir}/usr/share/doc/compiz/"
+
+  # Amend XDG .desktop file to load the compizconfig plugin with compiz
+  #sed -i 's/Exec\=compiz/Exec\=compiz ccp/' "${pkgdir}/usr/share/applications/compiz.desktop"
+
+  # Merge the gconf schema files
+  if [ -d "${pkgdir}/usr/share/gconf/schemas" ]; then    
+    gconf-merge-schema "${pkgdir}/usr/share/gconf/schemas/compiz.schemas.in" "{$pkgdir}"/usr/share/gconf/schemas/*.schemas
+    sed -i '/<schemalist\/>/d' "${pkgdir}/usr/share/gconf/schemas/compiz.schemas.in"
+    rm -f "${pkgdir}"/usr/share/gconf/schemas/*.schemas
+    mv "${pkgdir}/usr/share/gconf/schemas/compiz.schemas.in" "${pkgdir}/usr/share/gconf/schemas/compiz.schemas"
+  fi
+
+  # Add the pesky gsettings schema files manually
+  if ls generated/glib-2.0/schemas/ | grep -qm1 .gschema.xml; then
+    install -dm755 "${pkgdir}/usr/share/glib-2.0/schemas/" 
+    install -m644 generated/glib-2.0/schemas/*.gschema.xml "${pkgdir}/usr/share/glib-2.0/schemas/" 
+  fi
+  
+  ## Manjaro-Xfce stuff
+  # Add Manjaro dconf/gsettings schema override file
+  install -Dm644 "${srcdir}"/compiz-manjaro.theme.gschema.override "${pkgdir}/usr/share/glib-2.0/schemas/compiz-manjaro.theme.gschema.override"
+  # Make ccsm icon appear in Xfce settings manager
+  sed -i 's|Categories=Compiz;Settings;DesktopSettings;|Categories=Compiz;Settings;DesktopSettings;X-XFCE-SettingsDialog;X-XFCE-OtherSettings;|' "${pkgdir}"/usr/share/applications/ccsm.desktop
+  # Install GWD theme selector app
+  install -Dm755 "$srcdir/compiz-gtk-decorator-theme-selector" "$pkgdir/usr/bin/compiz-gtk-decorator-theme-selector"
+  install -Dm644 "$srcdir/compiz-gtk-decorator-theme.desktop" "$pkgdir/usr/share/applications/compiz-gtk-decorator-theme.desktop"
+  # Place autostart enablers/scripts
+  install -Dm755 "${srcdir}"/compiz-xfce-autostart "${pkgdir}"/usr/bin/compiz-xfce-autostart
+  install -Dm644 "${srcdir}"/compiz-xfce-autostart.desktop "${pkgdir}"/etc/xdg/autostart/compiz-xfce-autostart.desktop
+  
+  # greybird window decorations
+  cd "$srcdir/Greybird-1.2.2"
+  mkdir -p "$pkgdir/usr/share/themes/compiz-xfce-greybird"
+  cp LICENSE* "$pkgdir/usr/share/themes/compiz-xfce-greybird"
+  cp -r metacity-1/ "$pkgdir/usr/share/themes/compiz-xfce-greybird"
+  rm "$pkgdir/usr/share/themes/compiz-xfce-greybird/metacity-1/metacity-theme-3.xml"
+  sed -i 's|Greybird|compiz-xfce-greybird|' "$pkgdir/usr/share/themes/compiz-xfce-greybird/metacity-1/metacity-theme-2.xml"
+}
+

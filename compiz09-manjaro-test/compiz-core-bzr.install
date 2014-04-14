@@ -1,0 +1,81 @@
+pkgname=compiz
+
+post_install() {
+    echo "  -> Updating icon cache..."
+    gtk-update-icon-cache -q -f -t /usr/share/icons/hicolor
+    echo "  -> Updating XDG menu database..."
+    update-desktop-database -q
+
+    if [ -f usr/share/gconf/schemas/$pkgname.schemas ]; then
+        echo "  -> Installing GConf schemas... "
+        gconfpkg --install $pkgname
+    fi
+    ls usr/share/glib-2.0/schemas 2>/dev/null | grep -qm1 org.compiz
+    if [ $? -eq 0 ]; then
+        echo "  -> Recompiling the GSettings database... "
+        glib-compile-schemas usr/share/glib-2.0/schemas
+    fi
+    
+  # Xfce autostart. The second sed command generally won't work on initial installation, but that's ok, it's dealt with elsewhere.
+  sed -i 's|xfwm4|compiz|' /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml 2>/dev/null
+  sed -i 's|xfwm4|compiz|' /home/*/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml 2>/dev/null
+  
+  echo ""
+  echo "**                     XFCE USERS                           **"  
+  echo "** Log out and back in, then Compiz should then be running. **"
+  echo "**                                                          **"
+  echo "** If not, log out and back in a second time.               **"
+  echo "** If it still doesn't auto-start properly, clear your      **"
+  echo "** session data (Menu -> Settings -> Session and Startup -> **"
+  echo "** Session tab -> 'Clear saved sessions' button)            **"
+  echo "** Then reboot and ensure 'Save session for future logins'  **"
+  echo "** is NOT ticked in the log out window.                     **"
+  echo ""
+}
+
+pre_upgrade() {
+    if [ -f /usr/share/gconf/schemas/$pkgname.schemas ]; then
+        echo "  -> Uninstalling GConf schemas... "
+        gconfpkg --uninstall $pkgname
+    fi
+}
+
+post_upgrade() {
+    echo "  -> Updating icon cache..."
+    gtk-update-icon-cache -q -f -t /usr/share/icons/hicolor
+    echo "  -> Updating XDG menu database..."
+    update-desktop-database -q
+
+    if [ -f usr/share/gconf/schemas/$pkgname.schemas ]; then
+        echo "  -> Installing GConf schemas... "
+        gconfpkg --install $pkgname
+    fi
+    ls usr/share/glib-2.0/schemas 2>/dev/null | grep -qm1 org.compiz
+    if [ $? -eq 0 ]; then
+        echo "  -> Recompiling the GSettings database... "
+        glib-compile-schemas usr/share/glib-2.0/schemas
+    fi
+}
+
+pre_remove() {    
+    pre_upgrade $1
+}
+
+post_remove() {
+    echo "  -> Updating icon cache..."
+    gtk-update-icon-cache -q -f -t /usr/share/icons/hicolor    
+    echo " -> Updating XDG menu database..."
+    update-desktop-database -q
+
+    if [ -d /usr/share/glib-2.0/schemas ]; then
+        echo "  -> Recompiling the GSettings database... "
+        glib-compile-schemas usr/share/glib-2.0/schemas
+    fi
+    
+  # Xfce autostart removal
+  sed -i 's|compiz|xfwm4|' /etc/xdg/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml 2>/dev/null
+  sed -i 's|compiz|xfwm4|' /home/*/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml 2>/dev/null
+  rm /home/*/.config/autostart/compiz-xfce-autostart.desktop 2>/dev/null
+  rm /home/*/.config/autostart/compiz-xfce-decoratortheme.desktop 2>/dev/null
+}
+
