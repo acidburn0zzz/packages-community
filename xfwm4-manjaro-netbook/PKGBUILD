@@ -1,0 +1,48 @@
+# Maintainer : Rob McCathie <manjaropkg at rmcc dot com dot au>
+# Contributor: Cedric Leporcq <cedric at gmail dot com>
+
+pkgname=xfwm4-manjaro-netbook
+_pkgname=xfwm4-titleless
+pkgver=4.11.1
+pkgrel=3
+pkgdesc="Xfwm4 package from the Manjaro Netbook Edition, based on xfwm4-titleless-dev, patched for maximized default placement"
+arch=('i686' 'x86_64')
+url="https://github.com/cedl38/xfwm4-titleless"
+license=('GPL2')
+depends=('libxfce4ui>=4.11' 'libwnck' 'hicolor-icon-theme')
+makedepends=('intltool' 'xfce4-dev-tools' 'exo')
+provides=("xfwm4=${pkgver}")
+conflicts=('xfwm4')
+install=xfwm4.install
+source=("${_pkgname}-$pkgver.tar.gz::https://github.com/cedl38/${_pkgname}/archive/v${pkgver}-t.tar.gz"
+        'maximized_placement.patch')
+sha1sums=('d36857d52d68a2d3c5253c8b329bb68f6c0c2012'
+          '416c519e9f1ec4c050cca1036861df59679b2b6c')
+
+prepare() {
+  cd "$srcdir/${_pkgname}-${pkgver}-t"
+  patch -Np1 -i "$srcdir"/maximized_placement.patch
+}
+
+build() {
+  cd "$srcdir/${_pkgname}-${pkgver}-t"
+
+    ./autogen.sh \
+    --prefix=/usr \
+    --sysconfdir=/etc \
+    --libexecdir=/usr/lib \
+    --localstatedir=/var \
+    --disable-static \
+    --enable-startup-notification \
+    --enable-randr \
+    --enable-compositor \
+    --enable-xsync \
+    --enable-debug=minimal
+
+  make
+}
+
+package() {
+  cd "$srcdir/${_pkgname}-${pkgver}-t"
+  make DESTDIR="$pkgdir" install
+}

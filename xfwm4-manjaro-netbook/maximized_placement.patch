@@ -1,0 +1,33 @@
+diff -Naur a/src/placement.c b/src/placement.c
+--- a/src/placement.c	2013-12-14 21:51:49.000000000 +1100
++++ b/src/placement.c	2014-01-16 19:49:49.736759691 +1100
+@@ -712,6 +712,9 @@
+ 
+     c->x = best_x;
+     c->y = best_y;
++    
++    FLAG_SET (c->flags, CLIENT_FLAG_MAXIMIZED_HORIZ);
++    FLAG_SET (c->flags, CLIENT_FLAG_MAXIMIZED_VERT);
+ }
+ 
+ static void
+@@ -722,6 +725,9 @@
+ 
+     c->x = MAX (full_x + frameLeft(c) + (full_w - frameWidth(c)) / 2, full_x + frameLeft(c));
+     c->y = MAX (full_y + frameTop(c) + (full_h - frameHeight(c)) / 2, full_y + frameTop(c));
++    
++    FLAG_SET (c->flags, CLIENT_FLAG_MAXIMIZED_HORIZ);
++    FLAG_SET (c->flags, CLIENT_FLAG_MAXIMIZED_VERT);
+ }
+ 
+ static void
+@@ -738,6 +744,9 @@
+ 
+     c->x = MAX (c->x, full_x + frameLeft(c));
+     c->y = MAX (c->y, full_y + frameTop(c));
++    
++    FLAG_SET (c->flags, CLIENT_FLAG_MAXIMIZED_HORIZ);
++    FLAG_SET (c->flags, CLIENT_FLAG_MAXIMIZED_VERT);
+ }
+ 
+ void
