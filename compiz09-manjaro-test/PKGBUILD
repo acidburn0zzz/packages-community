@@ -4,7 +4,7 @@
 
 pkgname=compiz09-manjaro-test
 pkgver=3856
-pkgrel=1
+pkgrel=2
 _bzrname=compiz
 _bzrbranch=0.9.11
 pkgdesc="Compiz 0.9.11 development branch. Includes saner/nicer defaults, GWD theme selector and autostart for Xfce."
@@ -29,7 +29,7 @@ sha1sums=('63ca3b226095dabf9b07faf67cd4dc92182768a9'
           '6a8f9f30becdc0713f1da0b8a1105295f1014dc2'
           '9b3dd487e9142e826848dc6b5d95a98fbb648f3c'
           'd0d8b5fecf0ef2856eed89132066c2cc365441f7'
-          '1f69621d3ff3002dfaf25b58f1f67c96035ac277'
+          '5b4f6bf581ff5e92c13eb57e38085f1ae74ccb32'
           '46dc02d4033849cda551e930f772dc73fdf12c36'
           'a790b6556695b06af4eff910e7dc409aab85f9a8'
           '57a827b34b58f03e692262a6746b394cb70149dc')
@@ -67,10 +67,10 @@ if [ "${GSETTINGS}" == "on" ]; then
   fi
 fi
 
-pkgver() {
-  cd $_bzrname
-  bzr revno
-}
+#pkgver() {
+#  cd $_bzrname
+#  bzr revno
+#}
 
 prepare() {
   ## Comment these out if using VCS source download (if you uncommented it in the source array)
@@ -108,7 +108,7 @@ prepare() {
     -DUSE_GSETTINGS="${GSETTINGS}" \
     -DCOMPIZ_BUILD_TESTING=Off \
     -DCOMPIZ_WERROR=Off \
-    -DCOMPIZ_DEFAULT_PLUGINS="composite,opengl,decor,resize,place,move,ccp"
+    -DCOMPIZ_DEFAULT_PLUGINS="composite,opengl,decor,resize,place,move,compiztoolbox,staticswitcher,ccp"
 }
 
 build() {

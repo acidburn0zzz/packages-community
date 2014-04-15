@@ -19,6 +19,18 @@ diff -Naur a/metadata/core.xml.in b/metadata/core.xml.in
  			</option>
  			<option name="show_desktop_key" type="key">
  			<_short>Show Desktop</_short>
+diff -Naur a/plugins/composite/composite.xml.in b/plugins/composite/composite.xml.in
+--- a/plugins/composite/composite.xml.in	2014-04-14 17:49:05.445569000 +1000
++++ b/plugins/composite/composite.xml.in	2014-04-15 14:09:59.425983951 +1000
+@@ -24,7 +24,7 @@
+ 	    <option name="unredirect_fullscreen_windows" type="bool">
+ 		<_short>Unredirect Fullscreen Windows</_short>
+ 		<_long>Allow drawing of fullscreen windows to not be redirected to offscreen pixmaps</_long>
+-		<default>true</default>
++		<default>false</default>
+ 	    </option>
+ 	    <option name="unredirect_match" type="match">
+ 		<_short>Unredirect Match</_short>
 diff -Naur a/plugins/place/place.xml.in b/plugins/place/place.xml.in
 --- a/plugins/place/place.xml.in	2014-04-14 17:49:05.445569000 +1000
 +++ b/plugins/place/place.xml.in	2014-04-14 17:52:54.364621257 +1000
