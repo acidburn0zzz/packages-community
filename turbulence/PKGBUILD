@@ -1,27 +1,28 @@
-# Maintainer: dcell <sesshomaru@hushmail.com>
+# Maintainer: Joshua Strot <joshua@manjaro.org>
 pkgname=turbulence
-pkgver=0.3.3
+pkgver=0.3.5
 pkgrel=1
-pkgdesc="System configurer at boot for KDE and OpenBox, similar to Chakra's Kapudan."
+pkgdesc="System configurer at boot for KDE and OpenBox."
 url="http://manjaro.org"
-depends=('python2' 'python2-pyqt4' 'pyqt4-common' 'qt4' 'wmctrl')
-optdepends=('kdeplasma-theme-cupertino-ish' 'kde-theme-air-black-remix-green' 'lxterminal')
+depends=('python' 'python-pyqt5' 'pyqt5-common' 'qt5-base' 'wmctrl')
+makedepends=('git' 'qtchooser' 'qt5-tools')
+optdepends=('turbulence-artwork: Needed to change wallpapers' 'kdeplasma-theme-cupertino-ish' 'kde-theme-air-black-remix-green' 'lxterminal')
 conflicts=('turbulence-evolution')
 provides=('turbulence-evolution')
 license=('GPL')
 arch=('any')
 
 _git="no"
-_snapshot=12d29f36c2868a9e209c4e77ab9e1f48ab341a6d
+_snapshot=a819fb8a9d008fe477f1ac0b57d22ab9160096be
 
 if [ "$_git" == "yes" ]; then
-    source=(git+http://git.manjaro.org/community/turbulence.git)
+    source=(git+http://github.com/manjaro/turbulence.git)
     sha256sums=('SKIP')
 else
-    source=("turbulence-$pkgver.tar.gz::http://git.manjaro.org/community/turbulence/repository/archive.tar.gz?ref=v$pkgver")
-    sha256sums=('0f024447c19cc601fd5483cbccd6988e79532c501c18179bd71c08ac5a2e7439')
-    #source=("turbulence-$pkgver-$pkgrel.tar.gz::http://git.manjaro.org/community/turbulence/repository/archive.zip?ref=$_snapshot")
-    #sha256sums=('6a6a43f3c69d3eb22eaf246fa0fa33ecc7541a5b2c29ea6c0307a327cb26f42a')
+    source=("turbulence-$pkgver.tar.gz::http://github.com/manjaro/turbulence/archive/v$pkgver.tar.gz")
+    sha256sums=('5c947d824160ae63815e6fd4a59b89b26b1bcd25ce6792b435fb482d15985549')
+    #source=("turbulence-$pkgver.zip::http://github.com/manjaro/turbulence/archive/$_snapshot.zip")
+    #sha256sums=('3e0137c1614ee84dd8dc756ea8324eb978f35fdcbcb3ede56113975df85bcf94')
 fi
 
 build() {
@@ -37,8 +38,12 @@ build() {
         _dir="$srcdir/$pkgname.git"
         cd $_dir
     fi
+    if [ -e "$srcdir/$pkgname-$pkgver" ]; then
+        _dir="$srcdir/$pkgname-$pkgver"
+        cd $_dir
+    fi
 
-    lrelease-qt4 tr/*
+    lrelease tr/*
 }
 
 package() {
@@ -54,6 +59,10 @@ package() {
         _dir="$srcdir/$pkgname.git"
         cd $_dir
     fi
+    if [ -e "$srcdir/$pkgname-$pkgver" ]; then
+        _dir="$srcdir/$pkgname-$pkgver"
+        cd $_dir
+    fi
 
     if [ -e "$_dir/.git" ]; then
         rm -r $_dir/.git
@@ -61,16 +70,10 @@ package() {
 
     mkdir -p $pkgdir/usr/bin
     mkdir -p $pkgdir/usr/share/turbulence
-    mkdir -p $pkgdir/usr/share/wallpapers
-    mkdir -p $pkgdir/usr/share/backgrounds
     
     mv $_dir/* $pkgdir/usr/share/turbulence
     mv $pkgdir/usr/share/turbulence/turbulence $pkgdir/usr/bin/turbulence
-    mv $pkgdir/usr/share/turbulence/wallpapers/* $pkgdir/usr/share/wallpapers
-    mv $pkgdir/usr/share/turbulence/backgrounds/* $pkgdir/usr/share/backgrounds
     
-    rm -r $pkgdir/usr/share/turbulence/wallpapers
-    rm -r $pkgdir/usr/share/turbulence/backgrounds
     rm -r $pkgdir/usr/share/turbulence/install.sh
     rm -r $pkgdir/usr/share/turbulence/translate.pro
     rm -r $pkgdir/usr/share/turbulence/create_ts
