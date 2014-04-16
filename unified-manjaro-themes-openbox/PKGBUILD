@@ -1,6 +1,6 @@
-# Maintainer: rudylorren <rueday37@gmail.com>
+# Maintainer: Joshua Strot <joshua@manjaro.org>
 pkgname=unified-manjaro-themes-openbox
-pkgver=0.1
+pkgver=0.8.10pre1
 pkgrel=1
 pkgdesc="Artwork to get an unified look to all our editions."
 depends=("faenza-green-icon-theme" "ttf-droid" "openbox" "slim")
@@ -10,22 +10,27 @@ license=("GPL")
 arch=("any")
 
 _git="no"
-_snapshot=696b9f76a3c54a7c6de871b5487d7e0518bc7641
+_snapshot=babe620442f450a996378e74fa777623a56d1027
 
 if [ "$_git" == "yes" ]; then
     source=(git+http://git.manjaro.org/artwork/unified-manjaro-themes.git)
     sha256sums=('SKIP')
 else
-    source=("unified-manjaro-themes-$pkgver.tar.gz::http://git.manjaro.org/artwork/unified-manjaro-themes/repository/archive.tar.gz?ref=v$pkgver")
-    sha256sums=('2f5476cb29e36dbd229f8e6104c4c9a71c96f985a8bdd15e5fb9d754279b5bff')
-    #source=("unified-manjaro-themes-$pkgver-$pkgrel.zip::http://git.manjaro.org/artwork/unified-manjaro-themes/repository/archive.zip?ref=$_snapshot")
-    #sha256sums=('22a9ec0650cdcc89b302e14eb8a1fd3f3b14da6e617e4e0b98bb66393ed08d6d')
+    source=("unified-manjaro-themes-openbox-$pkgver.tar.gz::http://github.com/manjaro/artwork-unified-manjaro-themes/archive/v$pkgver.tar.gz")
+    sha256sums=('c9050fc50435cb4b799d84ce014883c4c6eed1d4b1e42ad400a1f059c07c4eca')
+    #source=("unified-manjaro-themes-openbox-$pkgver.zip::http://github.com/manjaro/artwork-unified-manjaro-themes/archive/$_snapshot.zip")
+    #sha256sums=('aa94830325ffa2edc5cea884c46abcee9c929bc063762a506567f916f4d22b10')
 fi
 
 package() {
-    _dir="$srcdir/unified-manjaro-themes.git"
-    cd $_dir
-        
+    if [ -d "$srcdir/artwork-unified-manjaro-themes-$pkgver" ]; then
+        _dir="$srcdir/artwork-unified-manjaro-themes-$pkgver"
+        cd $_dir
+    elif [ -d "$srcdir/artwork-unified-manjaro-themes-$_snapshot" ]; then
+        _dir="$srcdir/artwork-unified-manjaro-themes-$_snapshot"
+        cd $_dir
+    fi
+    
     if [ -e "$_dir/.git" ]; then
         rm -r $_dir/.git
     fi
