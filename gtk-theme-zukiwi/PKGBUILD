@@ -2,7 +2,7 @@
 # Contributor: bwat47 <bwat47 at gmail dot com>
 
 pkgname=gtk-theme-zukiwi
-pkgver=20131027
+pkgver=20140413
 pkgrel=1
 pkgdesc="A gtk2, gtk3, metacity, gnome-shell and unity theme..."
 arch=('any')
@@ -11,8 +11,8 @@ license=('GPL3')
 depends=('gtk-engines' 'gtk-engine-murrine')
 conflicts=('zukiwi-theme')
 options=('!strip')
-source=("http://gnome-look.org/CONTENT/content-files/152192-Zukiwi.zip")
-sha256sums=('5187dc70ead64a02a57c1aa55127cf025c6b40c5bf1046d3e614caf687fd2937')
+source=("$pkgname-$pkgver.zip::http://gnome-look.org/CONTENT/content-files/152192-Zukiwi.zip")
+sha256sums=('520b544809c72283211f7f611129dc6294c5100d46697e56b9ef680bf2ca3762')
 
 
 package() {
