@@ -1,0 +1,18 @@
+
+pkgname='ambiance-radiance-colors-themes'
+pkgver='14.04'
+pkgrel=1
+pkgdesc="Ambiance & Radiance Colors Suite"
+arch=('any')
+license=('GPL2')
+url="http://ravefinity.blogspot.com/"
+depends=('gtk-engine-murrine' 'gtk-engine-unico')
+source=("$pkgname-$pkgver.tar::https://drive.google.com/host/0B7iDWdwgu9QAYVBRYTgxaEdvT0k")
+sha256sums=('9423e66bab82514b9423717ef3816cd31499f628222a2e5e22ff435e6631b9ad')
+
+package() {
+  	mkdir -p "$pkgdir/usr/share/themes/"
+	cd "$srcdir/"
+	cp -r Ambiance-* "$pkgdir/usr/share/themes"
+	cp -r Radiance-* "$pkgdir/usr/share/themes"
+}

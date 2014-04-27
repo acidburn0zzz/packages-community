@@ -1,10 +1,11 @@
 # Installation script for KFaenza icon theme
 # Author: Krzysztof P. (donpedro69) - http://kde-look.org/content/show.php?action=content&content=160955
 # Edited for use in Kde by tulliana (actions icons patch-0.4 included)
+# Edited for use in Kde by FadeMind (merged faenza original pack and fixed some missing links)
 
 pkgname=kdeicons-kfaenza
-pkgver=0.8.9
-pkgrel=2
+pkgver=0.8.10pre2
+pkgrel=1
 pkgdesc="KFaenza Icons"
 arch=('any')
 url="http://kde-look.org/content/show.php?action=content&content=160955"
@@ -12,8 +13,8 @@ license=('CCPL')
 depends=('kdebase-workspace')
 conflicts=('kfaenza-icon-theme')
 provides=('kfaenza-icon-theme')
-source=("$pkgname-$pkgver.tar.gz::https://copy.com/gw2iV3NkZ1ss/KFaenza.tar.gz?download=1")
-md5sums=('1bb0175f71a74e277da4c222b22401f1')
+source=("$pkgname-$pkgver.tar.gz::https://copy.com/X9JtbVJw9o1d/KFaenza.tar.gz?download=1")
+md5sums=('fde139b08ba6116c3cfa011bc5c09fdb')
 
 package() {
    cd $startdir/src/KFaenza

@@ -1,0 +1,20 @@
+# Maintainer: Spike29 <leguen.yannick@gmail.com>
+# Contributor: Dan Serban
+
+pkgname='ambiance-radiance-xfce-lxde'
+pkgver='14.04'
+pkgrel=1
+pkgdesc="Ambiance & Radiance themes for Xfce and LXDE"
+arch=('any')
+license=('GPL2')
+url="http://ravefinity.blogspot.com/"
+depends=('gtk-engine-murrine' 'gtk-engine-unico')
+source=("$pkgname-$pkgver.tar::https://drive.google.com/file/d/0B7iDWdwgu9QAeGU3enZnRkx5dEU")
+sha256sums=('35362f47813d63ce5c2b43d0e90928138613cdb7137260a1c201ffcbac4e5e95')
+
+package() {
+  	mkdir -p "$pkgdir/usr/share/themes/"
+	cd "$srcdir/"
+	cp -r Ambiance-* "$pkgdir/usr/share/themes"
+	cp -r Radiance-* "$pkgdir/usr/share/themes"
+}

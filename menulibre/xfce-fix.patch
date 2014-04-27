@@ -1,0 +1,70 @@
+=== modified file 'menulibre/MenulibreApplication.py'
+--- menulibre/MenulibreApplication.py	2014-01-20 14:11:46 +0000
++++ menulibre/MenulibreApplication.py	2014-01-24 11:50:33 +0000
+@@ -611,7 +611,7 @@
+ 
+         # Configure the Selection
+         selection = self.treeview.get_selection()
+-        selection.set_select_function(self.on_treeview_selection)
++        selection.set_select_function(self.on_treeview_selection, None)
+ 
+     def configure_application_editor(self, builder):
+         """Configure the editor frame."""
+@@ -1367,7 +1367,8 @@
+             # Renable updates to history.
+             self.history.unblock()
+ 
+-    def on_treeview_selection(self, sel, store, path, is_selected):
++    def on_treeview_selection(self, sel, store, path, is_selected,
++                                user_data=None):
+         """Save changes on cursor change."""
+         if is_selected and self.save_button.get_sensitive():
+             question = _("Do you want to save the changes before leaving this "
+
+=== modified file 'menulibre/util.py'
+--- menulibre/util.py	2014-01-20 02:41:55 +0000
++++ menulibre/util.py	2014-01-24 11:50:33 +0000
+@@ -18,6 +18,9 @@
+ import os
+ import re
+ 
++import getpass
++import psutil
++
+ from gi.repository import GLib
+ 
+ import logging
+@@ -36,6 +39,20 @@
+ )
+ 
+ 
++def getProcessList():
++    """Return a list of unique process names for the current user."""
++    username = getpass.getuser()
++    pids = psutil.get_pid_list()
++    processes = []
++    for pid in pids:
++        process = psutil.Process(pid)
++        if process.username == username:
++            name = process.name
++            if name not in processes:
++                processes.append(process.name)
++    return processes
++
++
+ def getDefaultMenuPrefix():
+     """Return the default menu prefix."""
+     prefix = os.environ.get('XDG_MENU_PREFIX', '')
+@@ -45,6 +62,11 @@
+         if 'cinnamon' in os.environ.get('DESKTOP_SESSION', ''):
+             prefix = 'cinnamon-'
+ 
++    if prefix == "":
++        processes = getProcessList()
++        if 'xfce4-panel' in processes:
++            prefix = 'xfce-'
++
+     if len(prefix) == 0:
+         logger.warning("No menu prefix found, MenuLibre will not function "
+                         "properly.")
+

@@ -1,7 +1,8 @@
 # Maintainer: philm <philm@manjaro.org>
 
 pkgname=kdeplasma-applets-homerun
-pkgver=1.1.96
+_pkgname=homerun
+pkgver=1.2.3
 pkgrel=1
 pkgdesc="Fullscreen application launcher for KDE Plasma desktop"
 arch=('i686' 'x86_64')
@@ -9,21 +10,25 @@ url="http://userbase.kde.org/Homerun"
 license=('GPL' 'LGPL' 'BSD')
 depends=('kdebase-workspace' 'kdebase-lib')
 makedepends=('cmake' 'automoc4' 'git')
-#source=("http://download.kde.org/stable/$pkgname/src/$pkgname-$pkgver.tar.xz"
-source=("git://anongit.kde.org/homerun"
+source=(#"git://anongit.kde.org/homerun"
+        "http://download.kde.org/stable/$_pkgname/src/$_pkgname-$pkgver.tar.xz"
         'use-distro-icon.patch')
 install=$pkgname.install
-sha256sums=('SKIP'
+sha256sums=(#'SKIP'
+            '156f0bea0b01be4f7c6a196123401ddbea573b97d26677c1faaff59b8cbe881a'
             'a2b3f7adbc14d46639a269cf083e2c65fb0db461fd604729278cbb9a78b44d4c')
 
 build() {
-  cd "$srcdir"/homerun
+  #cd "$srcdir"/homerun
+  cd "$srcdir/$_pkgname-$pkgver"
   patch -p1 -i "${srcdir}/use-distro-icon.patch"
   
   cd "$srcdir"
   mkdir build
   cd build
-  cmake ../homerun \
+  #cmake ../homerun \
+  cmake ../$_pkgname-$pkgver \
+    -DQT_QMAKE_EXECUTABLE=qmake-qt4 \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release
   make
@@ -32,7 +37,7 @@ build() {
 package() {
   cd "$srcdir"/build
   make DESTDIR="$pkgdir" install
-  
-  install -Dm644 "$srcdir/homerun/LICENSE.BSD" "$pkgdir/usr/share/licenses/$pkgname/LICENCE"
+  #install -Dm644 "$srcdir/homerun/LICENSE.BSD" "$pkgdir/usr/share/licenses/$pkgname/LICENCE"
+  install -Dm644 "$srcdir/$_pkgname-$pkgver/LICENSE.BSD" "$pkgdir/usr/share/licenses/$pkgname/LICENCE"
 }
 

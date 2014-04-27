@@ -1,50 +1,61 @@
-# $Id: PKGBUILD 74703 2012-08-02 08:45:29Z bpiotrowski $
+# Contributor: Phillipe Smith <phillipe@archlinux.com.br>
+# Contributor: Christian Hesse <mail@eworm.de>
 # Contributor: Bartłomiej Piotrowski <nospam@bpiotrowski.pl>
 # Contributor: AndyRTR <andyrtr@archlinux.org>
 # Contributor: kiefer <jorgelmadrid@gmail.com>
 # Maintainer: Roland Singer <roland@manjaro.org>
+# Maintainer: Philip Müller <philm@manjaro.org>
 
 pkgname=lxdm
-pkgver=0.4.1
-pkgrel=30
+pkgver=0.4.1.r178.gbf90ec7
+pkgrel=1
 pkgdesc='Lightweight X11 Display Manager'
 arch=('i686' 'x86_64')
-url="http://sourceforge.net/projects/lxdm/"
+url="http://blog.lxde.org/?p=531"
 license=('GPL')
 groups=('lxde')
-depends=('gtk2' 'xorg-server' 'iso-codes' 'adwaita-manjaro-themes' 'lxdm-manjaro-theme')
+conflicts=('lxdm-git' 'lxdm-svn')
+install=lxdm.install
+backup=('etc/lxdm/lxdm.conf' 'etc/pam.d/lxdm' 'etc/lxdm/Xsession'
+    'etc/lxdm/PreLogin' 'etc/lxdm/LoginReady' 'etc/lxdm/PostLogin'
+    'etc/lxdm/PostLogout' 'etc/lxdm/PreReboot' 'etc/lxdm/PreShutdown')
+depends=('cairo' 'dbus-core' 'gdk-pixbuf2' 'glib2' 'gtk2' 'libx11' 'libxcb' 'pango')
 optdepends=('lxpolkit: to run lxdm-config directly from menu'
             'gtk-engines: default GTK+ theme'
             'librsvg: display the default background')
-makedepends=('intltool')
-install=${pkgname}.install
-backup=('etc/lxdm/lxdm.conf' 'etc/pam.d/lxdm' 'etc/lxdm/Xsession'
-        'etc/lxdm/PreLogin' 'etc/lxdm/LoginReady' 'etc/lxdm/PostLogin'
-        'etc/lxdm/PostLogout' 'etc/lxdm/PreReboot' 'etc/lxdm/PreShutdown')
-source=(http://downloads.sourceforge.net/lxde/$pkgname-$pkgver.tar.gz
-        default-config.patch
-        git-fixes.patch
-        lxdm.pam
-        Xsession
-        #####################################
-        ## Custom Manjaro Login Pane Patch ##
-        #####################################
-        lxdm.login_pane.patch
-        org.manjaro.pkexec.lxdm-config.policy
-        lxdm-config.desktop)
+makedepends=('intltool' 'git')
+source=('lxdm::git://lxde.git.sourceforge.net/gitroot/lxde/lxdm'
+    'Xsession.patch' 'lxdm.patch' 'xconn.patch'
+    'lxdm-pam' 'PostLogout'
+    #####################################
+    ## Custom Manjaro Login Pane Patch ##
+    #####################################
+    lxdm.login_pane.patch
+    org.manjaro.pkexec.lxdm-config.policy
+    lxdm-config.desktop)
+sha256sums=('SKIP'
+         '599d4526b8b9e62e0163e7184c93fb3e615752265d9cd6c082ddd2b6fae0416e' #Xsession.patch
+         'c4dbea49b6b4cab407d621e868e1bda0111df1012a244abde36cac54ea4a5735' #lxdm.patch
+         'f9189bb851fe29b47cc3e589e1bf55a16140a2f64ed7791a71e8676e884dac57' #xconn.patch
+         'ffbf4300a104a9bc38a9e7e14ad4120e7967941177598ea09e4d3f6a39e66507' #lxdm-pam
+         '260fd37365dc44fa99745d97a03d75b52c35f6abda0f82ee6f2508a3c32169d0' #PostLogout
+         '078b624d05a9a97414c48075c267fba4f7cfc21fec7f983de05fcc75a186d0c9' #lxdm.login_pane.patch
+         '21288b1de0354dfa3ee45c9c91552c3abb1e58aba48c70eb7b604b6e07e33ea1' #org.manjaro.pkexec.lxdm-config.policy
+         'ced6936b00b8e7cfd67b7be960e5e0f447581a03c1b19e34783257ed4b602db7' #lxdm-config.desktop
+)
+
+pkgver() {
+    cd $pkgname
+
+    if GITTAG="$(git describe --abbrev=0 --tags 2>/dev/null)"; then
+            echo "$(sed -e "s/^${pkgname%%-git}//" -e 's/^[-_/a-zA-Z]\+//' -e 's/[_-]\+/./g' <<< ${GITTAG}).r$(git rev-list --count ${GITTAG}..).g$(git log -1 --format="%h")"
+    else
+            echo "0.r$(git rev-list --count master).g$(git log -1 --format="%h")"
+    fi
+}
 
 prepare(){
-    cd "$srcdir/$pkgname-$pkgver"
-
-    # Apply various fixes from git
-    patch -Np1 -i ../git-fixes.patch
-
-    # Adjust Manjaro-specific settings
-    patch -Np1 -i ../default-config.patch
-
-    # Use our custom pam and Xsession files
-    cp ../lxdm.pam pam/lxdm
-    cp ../Xsession data/Xsession
+    cd $pkgname
 
     #####################################
     ## Custom Manjaro Login Pane Patch ##
@@ -53,38 +64,33 @@ prepare(){
 }
 
 build() {
-    cd "$srcdir/$pkgname-$pkgver"
-    autoreconf -fi
-    ./configure --prefix=/usr --sbindir=/usr/bin --libexecdir=/usr/lib/lxdm \
-                --sysconfdir=/etc --localstatedir=/var
+    cd $pkgname
+    
+    ./autogen.sh    
+    ./configure --prefix=/usr --bindir=/usr/bin --sbindir=/usr/bin --sysconfdir=/etc --libexecdir=/usr/lib/lxdm --localstatedir=/var --with-pam
     make
+
+    sed -i 's/getty@tty1/getty@tty7/g' systemd/lxdm.service
+    sed -i 's/sbin/bin/' systemd/lxdm.service
+    sed -i 's/sbin/bin/' data/lxdm
+
+    patch -Np0 < ${srcdir}/lxdm.patch
+    patch -Np0 < ${srcdir}/Xsession.patch
+    patch -Np1 < ${srcdir}/xconn.patch
 }
 
 package() {
-    cd "$srcdir/$pkgname-$pkgver"
-    make DESTDIR="$pkgdir" install
+    cd $pkgname
+
+    make DESTDIR=${pkgdir} sbindir=/usr/bin install
     chmod 644 "$pkgdir/etc/lxdm/lxdm.conf"
+    install -m644 ${srcdir}/lxdm-pam ${pkgdir}/etc/pam.d/lxdm
+    install -m755 ${srcdir}/PostLogout ${pkgdir}/etc/lxdm/PostLogout
 
     # Home directory
-    install -dm 755 "$pkgdir/var/lib/lxdm"
-    echo 'GDK_CORE_DEVICE_EVENTS=true' > "$pkgdir"/var/lib/lxdm/.pam_environment
+    install -d ${pkgdir}/var/{lib,run}/lxdm    
     chown -R 121:121 "$pkgdir/var/lib/lxdm"
-
-    ############################
-    ## Custom Manjaro Changes ##
-    ############################
-
-    # Fix logout behavior
-    echo '#!/bin/sh' > "${pkgdir}/etc/lxdm/PostLogout"
-    echo '' >> "${pkgdir}/etc/lxdm/PostLogout"
-    echo '# Kills all your processes when you log out.' >> "${pkgdir}/etc/lxdm/PostLogout"
-    echo 'killall --user $USER -TERM' >> "${pkgdir}/etc/lxdm/PostLogout"
-    echo '' >> "${pkgdir}/etc/lxdm/PostLogout"
-    echo '# Sets the desktop background to solid black. Useful if you have multiple monitors.' >> "${pkgdir}/etc/lxdm/PostLogout"
-    echo 'xsetroot -solid black' >> "${pkgdir}/etc/lxdm/PostLogout"
-
-    # Install policy file
-    install -Dm644 "${srcdir}/org.manjaro.pkexec.lxdm-config.policy" "${pkgdir}/usr/share/polkit-1/actions/org.manjaro.pkexec.lxdm-config.policy"
+    echo 'GDK_CORE_DEVICE_EVENTS=true' > "$pkgdir"/var/lib/lxdm/.pam_environment
 
     # Install launcher script
     echo '#!/bin/sh' > ${pkgdir}/usr/bin/lxdm-config-pkexec
@@ -94,13 +100,12 @@ package() {
 
     # Install desktop file
     install -Dm644 $srcdir/${pkgname}-config.desktop $pkgdir/usr/share/applications/${pkgname}-config.desktop
+
+    # GNOME Shell extension
+    mkdir -p "$pkgdir/usr/share/gnome-shell/extensions"
+    cp -r gnome-shell/LXDM_User_Switch@dgod "$pkgdir/usr/share/gnome-shell/extensions"
+
+    # avoid conflict with filesystem>=2012.06
+    rm -r ${pkgdir}/var/run
 }
 
-sha256sums=('9e0d0a5672fcf31a18de8178ce73eab1723d6ae7097dfe41e9fe2c46e180cf08'
-            '20e67bbc9dcb930d5127591918da64c516d9252371c0a3a57e565f7912ddb430'
-            'd8d7955ea6a5c11766b7016ae7aa57c444c9c5309087776466964d581ba9190f'
-            'e8c4c5fd3b801a390d201166fd1fb9730e78a5c62928768103b870b6bd980ea0'
-            '8c7e42ff271c8d0f7f3cfe11aca7f92f411bf5be1d86135f558b8e413e53dd30'
-            '078b624d05a9a97414c48075c267fba4f7cfc21fec7f983de05fcc75a186d0c9'
-            '21288b1de0354dfa3ee45c9c91552c3abb1e58aba48c70eb7b604b6e07e33ea1'
-            'ced6936b00b8e7cfd67b7be960e5e0f447581a03c1b19e34783257ed4b602db7')
