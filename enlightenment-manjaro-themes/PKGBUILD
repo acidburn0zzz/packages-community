@@ -6,7 +6,7 @@
 
 pkgname=enlightenment-manjaro-themes
 pkgver=1.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Themes and wallpaper from the Manjaro Enlightenment Edition"
 arch=('any')
 url="http://http://forum.manjaro.org/index.php?topic=2380.msg103950#msg103950"
@@ -16,7 +16,7 @@ license=('BSD')
 optdepends=("enlightenment: Just in case you actually want to use the themes")
 conflicts=('e18-manjaro-themes')
 provides=('e18-manjaro-themes')
-replaces=('e18-manjaro-themes')
+#replaces=('e18-manjaro-themes')
 install="$pkgname".install
 source=('enlightenment-manjaro-themes-0.1.1-1-any.pkg.tar.xz'
         'A-18-Black-Manjaro.edj'
