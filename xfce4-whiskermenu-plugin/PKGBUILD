@@ -4,7 +4,7 @@
 
 pkgname=xfce4-whiskermenu-plugin
 pkgver=1.3.2
-pkgrel=2
+pkgrel=3
 pkgdesc="Alternate Xfce menu"
 arch=('i686' 'x86_64')
 url="http://gottcode.org/${pkgname}/"
@@ -13,7 +13,7 @@ depends=('xfce4-panel')
 options=('!makeflags')
 install=${pkgname}.install
 _git=no
-_snapshot=418e199556547ec7f59deb5488318aadee402eb2
+_snapshot=82cb5127990881d38253ba01837534fa4abb6b57
 
 if [ "$_git" == "yes" ]; then
    makedepends=('cmake' 'git')
@@ -24,7 +24,7 @@ else
    #source=(http://gottcode.org/${pkgname}/${pkgname}-${pkgver}-src.tar.bz2)
    #sha256sums=('a104b2266675a3ea3c7b98aab7b075a351d813ea29098504031a62f365e5a0fc')
    source=("$pkgname-$pkgver-$pkgrel.tar.gz::https://github.com/gottcode/xfce4-whiskermenu-plugin/archive/$_snapshot.tar.gz")
-   sha256sums=('efc42a2a1ae78825b30fbe2e62bef845661ec22d140edf539c543f9554205090')
+   sha256sums=('a0fc36e6ac27de785d9f39372d14c8fbd6ffa79763f4d099825ae2518a4601be')
 fi
 
 #pkgver() {
