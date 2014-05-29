@@ -1,0 +1,28 @@
+#Maintainer: Joshua Strot
+pkgname=lxdm-manjaro-theme-openbox
+pkgver=20$(date +%y%m%d)
+pkgrel=1
+pkgdesc="Manjaro Linux LXDM Theme For OpenBox"
+url="https://github.com/dcell/artwork-lxdm-manjaro-theme-openbox"
+dependes=('manjaro-artwork')
+arch=(any)
+license=('GPL')
+
+_git="no"
+_snapshot=1f5e997d14d59060fb0813e7a3ecb246a4708cf3
+
+if [ "$_git" == "yes" ]; then
+    source=(git+https://github.com/dcell/artwork-$pkgname.git)
+    sha256sums=('SKIP')
+else
+    source=("lxdm-manjaro-theme-openbox-$pkgver.tar.gz::https://github.com/dcell/artwork-lxdm-manjaro-theme-openbox/archive/v$pkgver.tar.gz")
+    sha256sums=('6d260be0fce103e9ef57d0e5a6da36226482c6aa7b0f90496aeb85614cd5ef3c')
+    #source=("lxdm-manjaro-theme-openbox-$pkgver.zip::http://github.com/dcell/artwork-lxdm-manjaro-theme-openbox/archive/$_snapshot.zip")
+    #sha256sums=('18cfb32ffd8d1d90e32e9adfaca8364ee65601933945682c7d8ff19fc1a56eb7')
+fi
+
+package () {
+    mkdir -p "$pkgdir/usr/share/lxdm/themes/"
+    cp -r "$srcdir/$pkgname/Manjaro" "$pkgdir/usr/share/lxdm/themes/"
+    ln -sf "/usr/share/backgrounds/manjaro.jpg" "$pkgdir/usr/share/lxdm/themes/Manjaro/background-image"
+}

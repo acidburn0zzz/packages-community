@@ -1,13 +1,13 @@
 # Maintainer: Rob McCathie <rob@manjaro.org>
 # The contained artwork is made by or modfied from it's original by Agust
 
-# The package source for the last version of this package was not available, the old binary package is, for now, included as a source for this package.
-# (enlightenment-manjaro-themes-0.1.1-1-any.pkg.tar.xz)
-
 pkgname=enlightenment-manjaro-themes
-pkgver=1.2
-pkgrel=2
-pkgdesc="Themes and wallpaper from the Manjaro Enlightenment Edition"
+
+# pkgver should match the latest Enlightenment edition that *every* included theme is compatible with, use pkgrel for other updates
+pkgver=0.18
+pkgrel=1
+
+pkgdesc="Themes and wallpaper from the Manjaro Enlightenment Edition."
 arch=('any')
 url="http://http://forum.manjaro.org/index.php?topic=2380.msg103950#msg103950"
 license=('BSD')
@@ -15,40 +15,27 @@ license=('BSD')
 #makedepends=('')
 optdepends=("enlightenment: Just in case you actually want to use the themes")
 conflicts=('e18-manjaro-themes')
-provides=('e18-manjaro-themes')
-#replaces=('e18-manjaro-themes')
+#provides=('')
+#replaces=('')
 install="$pkgname".install
-source=('enlightenment-manjaro-themes-0.1.1-1-any.pkg.tar.xz'
-        'A-18-Black-Manjaro.edj'
-        'A-18-Dark-Manjaro.edj'
-        'A-18-Manjaro-Withe.edj'
-        'A-Wall-Manjaro.edj'
-        'A-18-Wall-Manjaro-Night.edj'
-        'A-19-Manjaro-Onix.edj'
-        'A-19-Manjaro-Withe.edj')
-sha1sums=('c8de5297adb378ec3854e4110d81989f28f08067'
-          '541a775d0b8c01d5768330aa0f3ba4676513ee22'
-          '6b8a6890e8ea3938669db5166287ec2bd2191d40'
-          'a8bebb441d26abd6aba71e9425b2780d44892e2a'
-          '5deca302cb539269d8781e050c5dde129e6cefe2'
-          'a5a29dac438a738c322fca12f2019e909796dec9'
+source=('enlightenment-theme-manjaro-dark.edj'
+        'enlightenment-theme-manjaro-white.edj'
+        'enlightenment-theme-manjaro-green.edj'
+        'enlightenment-theme-manjaro-black.edj'
+        'enlightenment-wallpaper-manjaro.edj')
+sha1sums=('86d977892f1be2e4694615c749502c31116c9fda'
+          '8470577698bc4afc8f4285c979d54460523e6df1'
           '355fc3b74d3ba8277c1053a9593ea3479924612c'
-          '8470577698bc4afc8f4285c979d54460523e6df1')
+          'b6cd80cba31d4400ff5fe72b1cebf21c273b4dc7'
+          'a5a29dac438a738c322fca12f2019e909796dec9')
 
-package() {
-  ## Dump the content of the old binary package into the new one, so we don't potentially break enlightenment startup for every installation <=0.8.9
-  ## This is kinda terrible
-  cp -r "$srcdir"/usr "$pkgdir"
-  
+package() {  
   ## Themes
-  ## TODO: Themes need to be renamed to remove enlightenment version reference
-  install -Dm644 "$srcdir"/A-18-Black-Manjaro.edj "$pkgdir"/usr/share/elementary/themes/A-18-Black-Manjaro.edj
-  install -Dm644 "$srcdir"/A-18-Dark-Manjaro.edj "$pkgdir"/usr/share/elementary/themes/A-18-Dark-Manjaro.edj
-  install -Dm644 "$srcdir"/A-18-Manjaro-Withe.edj "$pkgdir"/usr/share/elementary/themes/A-18-Manjaro-Withe.edj
-  install -Dm644 "$srcdir"/A-19-Manjaro-Onix.edj "$pkgdir"/usr/share/elementary/themes/A-19-Manjaro-Onix.edj
-  install -Dm644 "$srcdir"/A-19-Manjaro-Withe.edj "$pkgdir"/usr/share/elementary/themes/A-19-Manjaro-Withe.edj
-  
-  ## Wallpapers
-  install -Dm644 "$srcdir"/A-Wall-Manjaro.edj "$pkgdir"/usr/share/enlightenment/data/backgrounds/A-Wall-Manjaro.edj
-  install -Dm644 "$srcdir"/A-18-Wall-Manjaro-Night.edj "$pkgdir"/usr/share/enlightenment/data/backgrounds/A-18-Wall-Manjaro-Night.edj
+  install -Dm644 "$srcdir"/enlightenment-theme-manjaro-dark.edj "$pkgdir"/usr/share/elementary/themes/enlightenment-theme-manjaro-dark.edj
+  install -Dm644 "$srcdir"/enlightenment-theme-manjaro-white.edj "$pkgdir"/usr/share/elementary/themes/enlightenment-theme-manjaro-white.edj
+  install -Dm644 "$srcdir"/enlightenment-theme-manjaro-green.edj "$pkgdir"/usr/share/elementary/themes/enlightenment-theme-manjaro-green.edj
+  install -Dm644 "$srcdir"/enlightenment-theme-manjaro-black.edj "$pkgdir"/usr/share/elementary/themes/enlightenment-theme-manjaro-black.edj
+
+  ## Wallpaper
+  install -Dm644 "$srcdir"/enlightenment-wallpaper-manjaro.edj "$pkgdir"/usr/share/enlightenment/data/backgrounds/enlightenment-wallpaper-manjaro.edj
 }
