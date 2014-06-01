@@ -69,6 +69,10 @@ package() {
   install -Dm644 NEWS "$pkgdir/usr/share/doc/$_pkgname/NEWS"
   install -Dm644 README "$pkgdir/usr/share/doc/$_pkgname/README"
   
+# fix permissions to match our file system
+  chmod 750 "$pkgdir"/etc/sudoers.d
+  chmod 660 "$pkgdir"/etc/sudoers.d/entrance
+  
 # change default theme for Manjaro
   rm "$pkgdir"/usr/share/entrance/themes/default.edj
   cp "$srcdir"/manjaro_default.edj "$pkgdir"/usr/share/entrance/themes/default.edj
