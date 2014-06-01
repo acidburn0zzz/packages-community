@@ -6,8 +6,8 @@
 
 _pkgname=entrance
 pkgname=$_pkgname-git-manjaro
-pkgver=0.0.99.r98.1160e12
-pkgrel=0.1
+pkgver=0.0.99.r245.f626cb0
+pkgrel=1
 pkgdesc="Enlightenment Display Manager"
 url="http://www.enlightenment.org/"
 license=('GPL3')
@@ -37,7 +37,7 @@ prepare() {
       -e '/"shutdown"/ s|/sbin/shutdown -h now|/usr/bin/systemctl poweroff|' \
       -e '/"reboot"/ s|/sbin/shutdown -r now|/usr/bin/systemctl reboot|' \
       -e '/"suspend"/ s|/usr/sbin/pm-suspend|/usr/bin/systemctl suspend|' \
-      -i "$srcdir/$_pkgname/data/entrance.conf"
+      -i "$srcdir/$_pkgname/data/entrance.conf.in"
 }
 
 build() {
