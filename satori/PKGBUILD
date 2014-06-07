@@ -1,0 +1,47 @@
+# Maintainer: Joshua Strot <joshua@manjaro.org>
+pkgname=satori
+pkgver=20$(date +%y%m%d)
+pkgrel=1
+pkgdesc="Package version checker for AUR and official repositories"
+url="https://github.com/manjaro/satori"
+depends=('python' 'git' 'openssh')
+license=('GPL')
+arch=('any')
+
+_git="no"
+_snapshot=c458cc9ed94daaf3f87ffae1318b440d2b9e0251
+
+if [ "$_git" == "yes" ]; then
+    source=(git+http://github.com/manjaro/satori.git)
+    sha256sums=('SKIP')
+else
+    source=("satori-$pkgver.zip::http://github.com/manjaro/satori/archive/$_snapshot.zip")
+    sha256sums=('3975cf53ad1fa275296082a7dd1d50bfcb54e5e7a2197bc60398aa4e890bfdea')
+fi
+
+package() {
+    if [ -e "$srcdir/satori" ]; then
+        _dir="$srcdir/satori"
+        cd $_dir
+    fi
+    if [ -e "$srcdir/satori-$_snapshot" ]; then
+        _dir="$srcdir/satori-$_snapshot"
+        cd $_dir
+    fi
+    if [ -e "$srcdir/satori-$pkgver" ]; then
+        _dir="$srcdir/satori-$pkgver"
+        cd $_dir
+    fi
+    if [ -e "$_dir/.git" ]; then
+        rm -r $_dir/.git
+    fi
+
+    mkdir -p $pkgdir/usr/bin
+    mkdir -p $pkgdir/usr/share/satori
+    
+    cp * $pkgdir/usr/share/satori
+    mv $pkgdir/usr/share/satori/satori $pkgdir/usr/bin/
+    
+    rm $pkgdir/usr/share/satori/README.md
+    rm $pkgdir/usr/share/satori/blacklist.txt
+}
