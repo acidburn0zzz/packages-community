@@ -17,7 +17,7 @@ source=('compiz-xfce-decoratortheme'
 
 sha1sums=('da229e2c5d2badab521b6a87137ac44d7e4962a5'
           '9a9b28143e237834e98c82bb677a1cff62dc3af9'
-          '52ed86a88eabc0d533de05f6906af61e0466dbe5'
+          'd55d2efd6e90b237e779ca5a636550d48fb380e1'
           'a790b6556695b06af4eff910e7dc409aab85f9a8'
           '57a827b34b58f03e692262a6746b394cb70149dc')
 
