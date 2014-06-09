@@ -1,6 +1,6 @@
 # Artworks:  tulliana <sonageldik@gmail.com>
 
-pkgname=ksplash-theme-manjaro
+pkgname=ksplash-theme-manjaro-style
 pkgver=1.0.1
 pkgrel=1
 pkgdesc="Manjaro Style KSplash"

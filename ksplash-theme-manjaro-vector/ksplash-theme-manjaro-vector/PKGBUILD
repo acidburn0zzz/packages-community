@@ -1,0 +1,18 @@
+# Artworks:  tulliana <sonageldik@gmail.com>
+
+pkgname=ksplash-theme-manjaro-vector
+pkgver=1.0
+pkgrel=1
+pkgdesc="Manjaro Vector KSplash"
+arch=('any')
+url="http://bilgegunluk.com"
+license=('CCPL')
+depends=('kdebase-workspace')
+source=("$pkgname-$pkgver.tar.gz::https://copy.com/RlHvIFGWdfB3/manjaro-vector-ksplash.tar.gz/?dl=1")
+sha1sums=('0ed8631371e64b3acddb9b733ab5997018ef4b7c')
+
+package() {
+   cd $startdir/src/manjaro-vector-ksplash
+   install -dm755  $pkgdir/usr/share/apps/ksplash/Themes/manjaro-vector-ksplash
+   cp -rf  * $pkgdir/usr/share/apps/ksplash/Themes/manjaro-vector-ksplash
+}

@@ -10,9 +10,9 @@ url="http://bilgegunluk.com"
 license=('CCPL')
 depends=('kdebase-workspace')
 source=($pkgname-$pkgver.tar.gz::https://copy.com/RlHvIFGWdfB3/manjaro-vector-wallpaper.tar.gz?download=1)
-md5sums='480a8c7ca0d65ccf7da22b117285c0a6'
+sha1sums='8235c9d1df923bb113329c5fa04659b2e6feea23'
 
 package() {
-  install -dm755 $pkgdir/usr/share/
-  mv $srcdir/$_themename $pkgdir/usr/share/
+  install -dm755 $pkgdir/usr/share/wallpapers/manjaro-vector
+  cp -rf  manjaro-vector-wallpaper/* $pkgdir/usr/share/wallpapers/manjaro-vector
 } 
